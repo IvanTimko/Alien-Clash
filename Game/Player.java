@@ -1,19 +1,31 @@
 package Game;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Player {
     protected int hp;
     protected int attackPower;
     protected int defense;
-    protected JLabel playerSkin;
+    protected Image skin;
     
 
     public Player(int hp, int attackPower, int defense) {
         this.hp = hp;
         this.attackPower = attackPower;
         this.defense = defense;
+        skin = new ImageIcon(getClass().getResource("playerSkin.jpg")).getImage();
+        
     }
+
+    public void setSkin(String url) {
+        this.skin =new ImageIcon(getClass().getResource(url)).getImage();
+    }
+
+    public Image getSkin() {
+        return skin;
+    }
+    
 
     public int getHP() {
         return hp;

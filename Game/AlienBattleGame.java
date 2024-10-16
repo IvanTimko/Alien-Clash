@@ -20,29 +20,34 @@ public class AlienBattleGame extends JPanel {
     private JFrame frame;
 
     public AlienBattleGame() {
+        
         // Initialize the frame
         frame = new JFrame("Alien Clash");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
+        frame.setLocationRelativeTo(null);
+        repaint();
 
         // Initialize player 1 (human) and player 2 (computer)
         player = new Player(100, 20, 5);
         computer = new ComputerPlayer(100, 15, 10);
 
         // Main game panel
+        
         this.setLayout(null);
         this.setPreferredSize(new Dimension(800, 600));
         this.setBackground(Color.BLACK);
+        
 
         // player and computer attack / defence ability icon
         attackIcon = new ImageIcon(getClass().getResource("attackLabel.png"));
         defenceIcon = new ImageIcon(getClass().getResource("shieldLabel.png"));
 
         // Player HP labels
-        playerHPLabel = new JLabel("Player 1 HP: " + player.getHP());
+        playerHPLabel = new JLabel(" HP: " + player.getHP());
         playerHPLabel.setForeground(Color.WHITE); // Set label color to make it visible on black background
-        playerHPLabel.setBounds(50, 20, 150, 30); // Adjusted bounds
-        opponenHPLabel = new JLabel("Player 2 HP: " + computer.getHP());
+        playerHPLabel.setBounds(100, 200, 150, 30); // Adjusted bounds
+        opponenHPLabel = new JLabel(" HP: " + computer.getHP());
         opponenHPLabel.setForeground(Color.WHITE);
         opponenHPLabel.setBounds(600, 20, 150, 30); // Adjusted bounds
 
@@ -59,6 +64,7 @@ public class AlienBattleGame extends JPanel {
         messageLabelComputer.setForeground(Color.WHITE);
         messageLabelComputer.setBounds(600, 70, 150, 30); // Adjusted bounds
         this.add(messageLabelComputer);
+        
 
         // Button panel for actions
         JButton shieldButton = new JButton("Shield");
@@ -142,8 +148,8 @@ public class AlienBattleGame extends JPanel {
 
     // Update HP labels
     private void updateHPLabel() {
-        playerHPLabel.setText("Player 1 HP: " + player.getHP());
-        opponenHPLabel.setText("Player 2 HP: " + computer.getHP());
+        playerHPLabel.setText(" HP: " + player.getHP());
+        opponenHPLabel.setText(" HP: " + computer.getHP());
     }
 
     // Check if there's a winner
@@ -165,5 +171,37 @@ public class AlienBattleGame extends JPanel {
                 comp.setEnabled(false);
             }
         }
+    }
+    //create background
+    Image backgroundImage = new ImageIcon(getClass().getResource("background.jpeg")).getImage();
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (backgroundImage != null) {
+            g.drawImage(backgroundImage, 0, 0, 800, 600, this);
+            g.drawImage(player.getSkin(), 100,250,130,150, this);
+            g.drawImage(computer.getSkin(), 550,100,130, 150, this);
+        }
+        drawHealthBar(g, player.getHP(), 100, 50, 20, 200, 20, Color.GREEN);
+    drawHealthBar(g, computer.getHP(), 100, 550, 20, 200, 20, Color.RED);
+        
+        
+    }
+
+    private void drawHealthBar(Graphics g, int currentHP, int maxHP, int x, int y, int width, int height, Color color) {
+        // Calculate health percentage
+        int healthPercentage = (int) ((double) currentHP / maxHP * width);
+        
+        // Draw the background (empty health bar)
+        g.setColor(Color.GRAY);
+        g.fillRect(x, y, width, height);
+    
+        // Draw the foreground (filled health bar based on current health)
+        g.setColor(color);
+        g.fillRect(x, y, healthPercentage, height);
+    
+        // Draw a border around the health bar
+        g.setColor(Color.WHITE);
+        g.drawRect(x, y, width, height);
     }
 }
