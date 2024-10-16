@@ -31,7 +31,6 @@ public class AlienBattleGame extends JPanel {
         frame = new JFrame("Alien Clash");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
-        frame.setLocationRelativeTo(null);
         repaint();
 
         // Initialize player 1 (human) and player 2 (computer)
@@ -42,6 +41,7 @@ public class AlienBattleGame extends JPanel {
         this.setLayout(null);
         this.setPreferredSize(new Dimension(800, 600));
         this.setBackground(Color.BLACK);
+        
 
         // Player and computer attack / defense ability icons
         attackIcon = new ImageIcon(getClass().getResource("attackLabel.png"));
@@ -88,6 +88,7 @@ public class AlienBattleGame extends JPanel {
         // Add the JPanel to the frame
         frame.add(this);  
         frame.pack();
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
         // Action listeners for buttons
