@@ -200,7 +200,6 @@ public class AlienBattleGame extends JPanel {
             updateHPLabel();
             checkVictory();
         } else if (action.equals("shield")) {
-            messageLabelPlayer.setIcon(defenceIcon);
             player.setDefence(10);
             playerDefenceActive = true;
 
@@ -226,7 +225,7 @@ private void computerTurn() {
     messageLabelComputer.setVisible(false);
     
     // Create a Swing Timer to delay the computer's move by 2 seconds (2000 milliseconds)
-    Timer computerMoveTimer = new Timer(4000, new ActionListener() {
+    Timer computerMoveTimer = new Timer(2500, new ActionListener() {
         
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -287,7 +286,9 @@ private void computerTurn() {
         if (player.getHP() <= 0) {
             disableButtons();
         } else if (computer.getHP() <= 0) {
-            disableButtons();
+            computer = new ComputerPlayer(100, 10, 5);
+            opponenHPLabel.setText("HP"+ computer.getHP());
+            
         }
     }
     
