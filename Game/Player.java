@@ -1,31 +1,33 @@
 package Game;
 
-import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
+import javax.swing.*;
 
 public class Player {
     protected int hp;
     protected int attackPower;
     protected int defense;
     protected Image skin;
-    
+    protected String[] Skins = new String[] {
+            "blue-player.png", "red-player.png", "green-player.png" };
+    protected Random random = new Random();
 
     public Player(int hp, int attackPower, int defense) {
         this.hp = hp;
         this.attackPower = attackPower;
         this.defense = defense;
-        skin = new ImageIcon(getClass().getResource("playerSkin.jpg")).getImage();
-        
+        skin = new ImageIcon(getClass().getResource(Skins[random.nextInt(3)])).getImage();
+
     }
 
     public void setSkin(String url) {
-        this.skin =new ImageIcon(getClass().getResource(url)).getImage();
+        this.skin = new ImageIcon(getClass().getResource(url)).getImage();
     }
 
     public Image getSkin() {
         return skin;
     }
-    
 
     public int getHP() {
         return hp;
