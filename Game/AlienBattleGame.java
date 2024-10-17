@@ -79,7 +79,7 @@ public class AlienBattleGame extends JPanel {
         
 
         //shield button set-up
-        JButton shieldButton = new JButton("Shield");
+        shieldButton = new JButton("Shield");
         shieldButton.setBounds(100, 450, 600, 50); 
         shieldButton.setIcon(new ImageIcon(this.getClass().getResource("defence.png")));
         //attack 1 button set-up
@@ -129,6 +129,8 @@ public class AlienBattleGame extends JPanel {
 
     // Start the player attack animation
     private void startPlayerAttackAnimation() {
+        //turn off buttons
+        toggleButtons(false);
         isAnimatingPlayerAttack = true;
         playerAttackX = 350;  // Start position just after player
         playerAttackY = 0;
@@ -159,7 +161,7 @@ public class AlienBattleGame extends JPanel {
     private void startComputerAttackAnimation() {
         isAnimatingComputerAttack = true;
         computerAttackX = 350;  // Start position just before computer
-        computerAttackY = 200;
+        computerAttackY = 100;
 
         // Timer to animate the computer's attack moving towards the player
         Timer timer = new Timer(35, new ActionListener() {
@@ -168,7 +170,7 @@ public class AlienBattleGame extends JPanel {
                 computerAttackX -= 10;  // Move attack towards the player
                 computerAttackY += 10;
                 // Check for collision with the player's position
-                if (computerAttackX <= 250) {  // Stop when it reaches the player
+                if (computerAttackX <= 150) {  // Stop when it reaches the player
                     ((Timer) e.getSource()).stop();
                     isAnimatingComputerAttack = false;
 
@@ -184,6 +186,7 @@ public class AlienBattleGame extends JPanel {
     // Method to handle player actions (attack/shield)
     private void playerAction(String action, Player player, Player opponent) {
         int damage;
+        
         //enhanced defence is only active for one round than it reverts back to base
         if (playerDefenceActive) {
             playerDefenceActive = false;
@@ -205,41 +208,72 @@ public class AlienBattleGame extends JPanel {
 
         // Switch to Player 2 (Computer's turn)
         playerTurn = false;
+        
+        
+        
+        
+        
         computerTurn();
     }
 
     // Computer's turn logic
-    private void computerTurn() {
+    // Computer's turn logic with 2 seconds delay
+// Computer's turn logic with 2 seconds delay using Thread
+// Computer's turn logic with 2 seconds delay using Swing Timer
+private void computerTurn() {
+    // Disable player's turn during computer's move
+    playerTurn = false;
+    messageLabelComputer.setVisible(false);
+    
+    // Create a Swing Timer to delay the computer's move by 2 seconds (2000 milliseconds)
+    Timer computerMoveTimer = new Timer(4000, new ActionListener() {
         
-        
-        String action = computer.getAction();
-
-        if (computerDefenceActive) {
-            computerDefenceActive = false;
-            computer.setDefence(-10);
-
-        }
-        if (action.equals("attack")) {
-            startComputerAttackAnimation();  // Start the computer's attack animation
-            // Execute attack logic
-            int damage = Math.max(computer.getAttackPower() - player.getDefense(), 0);
-            player.takeDamage(damage);
-            updateHPLabel();
-            checkVictory();
-            messageLabelComputer.setIcon(attackIcon);
+        @Override
+        public void actionPerformed(ActionEvent e) {
             
-        } else {
-            messageLabelComputer.setIcon(defenceIcon);
-            computer.setDefence(10);
-            computerDefenceActive = true;
+            // Get the computer's action (either attack or shield)
+            String action = computer.getAction();
+            toggleButtons(true);
+            if (computerDefenceActive) {
+                computerDefenceActive = false;
+                computer.setDefence(-10);
+            }
 
+            // If the computer decides to attack
+            if (action.equals("attack")) {
+                startComputerAttackAnimation();  // Start the computer's attack animation
+
+                // Execute attack logic
+                int damage = Math.max(computer.getAttackPower() - player.getDefense(), 0);
+                player.takeDamage(damage);
+                updateHPLabel();
+                checkVictory();
+                messageLabelComputer.setIcon(attackIcon);
+
+            // If the computer decides to shield
+            } else {
+                messageLabelComputer.setIcon(defenceIcon);
+                computer.setDefence(10);
+                computerDefenceActive = true;
+            }
+
+            // Switch back to Player's turn after computer's move
+            playerTurn = true;
+
+            // Stop the timer after the computer has made its move
+            messageLabelComputer.setVisible(true);
+            ((Timer) e.getSource()).stop();
         }
+    });
 
-        // Switch back to Player 
-        playerTurn = true;
-        //show buttons to player 
-        //attack1Button.setVisible(false);
-    }
+    // Start the timer (after 2 seconds, the computer's move will execute)
+    computerMoveTimer.setRepeats(false);  // Ensure it only runs once
+    computerMoveTimer.start();
+    
+}
+
+
+
 
     // Update HP labels
     private void updateHPLabel() {
@@ -310,6 +344,14 @@ public class AlienBattleGame extends JPanel {
         // Draw a border around the health bar
         g.setColor(Color.WHITE);
         g.drawRect(x, y, width, height);
+    }
+
+    private void toggleButtons(Boolean val) {
+        attack1Button.setVisible(val); 
+        attack2Button.setVisible(val);
+        ultimateButton.setVisible(val);
+        shieldButton.setVisible(val);
+
     }
     
 }
