@@ -72,13 +72,18 @@ public class AlienBattleGame extends JPanel {
         // Button panel for actions
         JButton shieldButton = new JButton("Shield");
         shieldButton.setBounds(100, 450, 600, 50); // Set bounds to center the button
+        shieldButton.setIcon(new ImageIcon(this.getClass().getResource("defence.png")));
 
         JButton attack1Button = new JButton("Attack");
         attack1Button.setBounds(100, 510, 180, 50);
+        attack1Button.setIcon(new ImageIcon(this.getClass().getResource("attack1.png")));
         JButton attack2Button = new JButton("Attack2");
         attack2Button.setBounds(310, 510, 180, 50);
+        attack2Button.setIcon(new ImageIcon(this.getClass().getResource("attack2.png")));
         JButton ultimateButton = new JButton("Ultimate");
         ultimateButton.setBounds(520, 510, 180, 50);
+        ultimateButton.setIcon(new ImageIcon(this.getClass().getResource("ultimate.png")));
+        
 
         this.add(attack1Button);
         this.add(shieldButton);
