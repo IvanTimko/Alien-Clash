@@ -239,8 +239,8 @@ public class AlienBattleGame extends JPanel {
         super.paintComponent(g);
         if (backgroundImage != null) {
             g.drawImage(backgroundImage, 0, 0, 800, 600, this);
-            g.drawImage(player.getSkin(), 100, 250, 130, 150, this);
-            g.drawImage(computer.getSkin(), 550, 100, 130, 150, this);
+            g.drawImage(player.getSkin(), 100, 250, 75, 150, this);
+            g.drawImage(computer.getSkin(), 550, 100, 75, 150, this);
         }
         
         drawHealthBar(g, player.getHP(), 100, 70, 200, 200, 20, Color.GREEN);
