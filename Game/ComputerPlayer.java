@@ -6,6 +6,7 @@ public class ComputerPlayer extends Player {
 
     public ComputerPlayer(int hp, int attackPower, int defense) {
         super(hp, attackPower, defense);
+        
     }
 
     @Override

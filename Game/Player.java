@@ -24,8 +24,8 @@ public class Player {
         this.defense += extraDef;
     }
 
-    public void setSkin(String url) {
-        this.skin = new ImageIcon(getClass().getResource(url)).getImage();
+    public void setRandomSkin() {
+        this.skin = new ImageIcon(getClass().getResource(Skins[random.nextInt(3)])).getImage();
     }
 
     public Image getSkin() {

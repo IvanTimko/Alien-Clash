@@ -13,7 +13,6 @@ public class AlienBattleGame extends JPanel {
 
     private JLabel playerHPLabel;
     private JLabel opponenHPLabel;
-    private JLabel messageLabelPlayer;
     private JLabel messageLabelComputer;
 
     JButton shieldButton;
@@ -25,6 +24,7 @@ public class AlienBattleGame extends JPanel {
     private ImageIcon defenceIcon;
     private JFrame frame;
 
+    private int ultimateLoaderCT;
     private int playerAttackX; // X position for the player's attack animation
     private int playerAttackY;
     private int computerAttackX; // X position for the computer's attack animation
@@ -65,11 +65,7 @@ public class AlienBattleGame extends JPanel {
         this.add(playerHPLabel);
         this.add(opponenHPLabel);
 
-        // Label for Last action of player 
-        messageLabelPlayer = new JLabel("‎ ");
-        messageLabelPlayer.setForeground(Color.WHITE);
-        messageLabelPlayer.setBounds(250, 270, 150, 50);
-        this.add(messageLabelPlayer);
+        
 
         // Label for Last action of computer
         messageLabelComputer = new JLabel(" ‎ ");
@@ -94,6 +90,8 @@ public class AlienBattleGame extends JPanel {
         ultimateButton = new JButton("Ultimate");
         ultimateButton.setBounds(520, 510, 180, 50);
         ultimateButton.setIcon(new ImageIcon(this.getClass().getResource("ultimate.png")));
+        //ultimate button is not initially available for use
+        ultimateButton.setVisible(false);
         
 
         this.add(attack1Button);
@@ -186,6 +184,8 @@ public class AlienBattleGame extends JPanel {
     // Method to handle player actions (attack/shield)
     private void playerAction(String action, Player player, Player opponent) {
         int damage;
+        //increment of ultimate loader
+        ultimateLoaderCT++;
         
         //enhanced defence is only active for one round than it reverts back to base
         if (playerDefenceActive) {
@@ -200,6 +200,7 @@ public class AlienBattleGame extends JPanel {
             updateHPLabel();
             checkVictory();
         } else if (action.equals("shield")) {
+            toggleButtons(false);
             player.setDefence(10);
             playerDefenceActive = true;
 
@@ -254,6 +255,7 @@ private void computerTurn() {
                 messageLabelComputer.setIcon(defenceIcon);
                 computer.setDefence(10);
                 computerDefenceActive = true;
+                
             }
 
             // Switch back to Player's turn after computer's move
@@ -350,9 +352,10 @@ private void computerTurn() {
     private void toggleButtons(Boolean val) {
         attack1Button.setVisible(val); 
         attack2Button.setVisible(val);
-        ultimateButton.setVisible(val);
         shieldButton.setVisible(val);
-
+        if (ultimateLoaderCT == 4 || val == false) {
+        ultimateButton.setVisible(val);
+        }
     }
     
 }
