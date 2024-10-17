@@ -20,6 +20,9 @@ public class Player {
         skin = new ImageIcon(getClass().getResource(Skins[random.nextInt(3)])).getImage();
 
     }
+    public void setDefence(int extraDef) {
+        this.defense += extraDef;
+    }
 
     public void setSkin(String url) {
         this.skin = new ImageIcon(getClass().getResource(url)).getImage();

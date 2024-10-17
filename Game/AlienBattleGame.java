@@ -8,11 +8,18 @@ public class AlienBattleGame extends JPanel {
     private Player player;
     private ComputerPlayer computer;
     private boolean playerTurn = true; // Player 1 starts the game
+    private boolean playerDefenceActive = false; 
+    private boolean computerDefenceActive = false;
 
     private JLabel playerHPLabel;
     private JLabel opponenHPLabel;
     private JLabel messageLabelPlayer;
     private JLabel messageLabelComputer;
+
+    JButton shieldButton;
+    JButton attack1Button;
+    JButton attack2Button;
+    JButton ultimateButton;
 
     private ImageIcon attackIcon;
     private ImageIcon defenceIcon;
@@ -34,7 +41,7 @@ public class AlienBattleGame extends JPanel {
         repaint();
 
         // Initialize player 1 (human) and player 2 (computer)
-        player = new Player(100, 20, 5);
+        player = new Player(100, 20, 10);
         computer = new ComputerPlayer(100, 15, 10);
 
         // Main game panel
@@ -58,29 +65,33 @@ public class AlienBattleGame extends JPanel {
         this.add(playerHPLabel);
         this.add(opponenHPLabel);
 
-        // Message label
+        // Label for Last action of player 
         messageLabelPlayer = new JLabel("‎ ");
         messageLabelPlayer.setForeground(Color.WHITE);
         messageLabelPlayer.setBounds(250, 270, 150, 50);
         this.add(messageLabelPlayer);
 
+        // Label for Last action of computer
         messageLabelComputer = new JLabel(" ‎ ");
         messageLabelComputer.setForeground(Color.WHITE);
         messageLabelComputer.setBounds(700, 130, 150, 50);
         this.add(messageLabelComputer);
         
-        // Button panel for actions
-        JButton shieldButton = new JButton("Shield");
-        shieldButton.setBounds(100, 450, 600, 50); // Set bounds to center the button
-        shieldButton.setIcon(new ImageIcon(this.getClass().getResource("defence.png")));
 
-        JButton attack1Button = new JButton("Attack");
+        //shield button set-up
+        JButton shieldButton = new JButton("Shield");
+        shieldButton.setBounds(100, 450, 600, 50); 
+        shieldButton.setIcon(new ImageIcon(this.getClass().getResource("defence.png")));
+        //attack 1 button set-up
+        attack1Button = new JButton("Attack");
         attack1Button.setBounds(100, 510, 180, 50);
         attack1Button.setIcon(new ImageIcon(this.getClass().getResource("attack1.png")));
-        JButton attack2Button = new JButton("Attack2");
+        //attack 2 button set-up
+        attack2Button = new JButton("Attack2");
         attack2Button.setBounds(310, 510, 180, 50);
         attack2Button.setIcon(new ImageIcon(this.getClass().getResource("attack2.png")));
-        JButton ultimateButton = new JButton("Ultimate");
+        //ultimate button set-up
+        ultimateButton = new JButton("Ultimate");
         ultimateButton.setBounds(520, 510, 180, 50);
         ultimateButton.setIcon(new ImageIcon(this.getClass().getResource("ultimate.png")));
         
@@ -137,9 +148,11 @@ public class AlienBattleGame extends JPanel {
                 }
 
                 repaint();  // Repaint to show the animation frame
+                
             }
         });
         timer.start();
+        
     }
 
     // Start the computer attack animation
@@ -159,11 +172,7 @@ public class AlienBattleGame extends JPanel {
                     ((Timer) e.getSource()).stop();
                     isAnimatingComputerAttack = false;
 
-                    // Execute attack logic
-                    int damage = Math.max(computer.getAttackPower() - player.getDefense(), 0);
-                    player.takeDamage(damage);
-                    updateHPLabel();
-                    checkVictory();
+                    
                 }
 
                 repaint();  // Repaint to show the animation frame
@@ -175,6 +184,13 @@ public class AlienBattleGame extends JPanel {
     // Method to handle player actions (attack/shield)
     private void playerAction(String action, Player player, Player opponent) {
         int damage;
+        //enhanced defence is only active for one round than it reverts back to base
+        if (playerDefenceActive) {
+            playerDefenceActive = false;
+            player.setDefence(-10);
+
+        }
+
         if (action.equals("attack")) {
             damage = Math.max(player.getAttackPower() - opponent.getDefense(), 0);
             opponent.takeDamage(damage);
@@ -182,6 +198,9 @@ public class AlienBattleGame extends JPanel {
             checkVictory();
         } else if (action.equals("shield")) {
             messageLabelPlayer.setIcon(defenceIcon);
+            player.setDefence(10);
+            playerDefenceActive = true;
+
         }
 
         // Switch to Player 2 (Computer's turn)
@@ -191,16 +210,35 @@ public class AlienBattleGame extends JPanel {
 
     // Computer's turn logic
     private void computerTurn() {
+        
+        
         String action = computer.getAction();
+
+        if (computerDefenceActive) {
+            computerDefenceActive = false;
+            computer.setDefence(-10);
+
+        }
         if (action.equals("attack")) {
             startComputerAttackAnimation();  // Start the computer's attack animation
+            // Execute attack logic
+            int damage = Math.max(computer.getAttackPower() - player.getDefense(), 0);
+            player.takeDamage(damage);
+            updateHPLabel();
+            checkVictory();
             messageLabelComputer.setIcon(attackIcon);
+            
         } else {
             messageLabelComputer.setIcon(defenceIcon);
+            computer.setDefence(10);
+            computerDefenceActive = true;
+
         }
 
-        // Switch back to Player 1
+        // Switch back to Player 
         playerTurn = true;
+        //show buttons to player 
+        //attack1Button.setVisible(false);
     }
 
     // Update HP labels
@@ -218,6 +256,7 @@ public class AlienBattleGame extends JPanel {
             disableButtons();
         }
     }
+    
 
     // Disable buttons after the game ends
     private void disableButtons() {
@@ -272,4 +311,5 @@ public class AlienBattleGame extends JPanel {
         g.setColor(Color.WHITE);
         g.drawRect(x, y, width, height);
     }
+    
 }
