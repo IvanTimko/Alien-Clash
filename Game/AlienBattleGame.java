@@ -9,7 +9,7 @@ public class AlienBattleGame extends JPanel {
     private Player player;
     private ComputerPlayer computer;
 
-    private boolean playerTurn = true; // Player 1 starts the game
+    
     private boolean playerDefenceActive = false; 
     private boolean computerDefenceActive = false;
     private boolean isAnimatingPlayerAttack = false; // To check if the player's attack animation is running
@@ -329,8 +329,7 @@ public class AlienBattleGame extends JPanel {
 
         }
 
-        // Switch to Player 2 (Computer's turn)
-        playerTurn = false;
+        
         
         //checks if the Stats boost menu should open
         isStatsBoost(roundCounter);
@@ -342,8 +341,7 @@ public class AlienBattleGame extends JPanel {
     // Computer's turn logic
 
 private void computerTurn() {
-    // Disable player's turn during computer's move
-    playerTurn = false;
+    
     messageLabelComputer.setVisible(false);
     
     // Create a Swing Timer to delay the computer's move by 2.5 seconds (2500 milliseconds)
@@ -381,8 +379,7 @@ private void computerTurn() {
                     
                 }
 
-                // Switch back to Player's turn after computer's move
-                playerTurn = true;
+                
 
 
                 // Stop the timer after the computer has made its move
@@ -431,8 +428,7 @@ private void computerTurn() {
                     // Reset the opponent's HP label
                     opponenHPLabel.setText(" HP: " + computer.getHP());
                     
-                    // Ensure player goes first and buttons are re-enabled
-                    playerTurn = true;
+                    
     
                     
                     // Update the game display
