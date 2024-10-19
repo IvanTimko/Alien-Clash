@@ -6,8 +6,8 @@ public class ComputerPlayer extends Player {
     boolean startSecond;
 
 
-    public ComputerPlayer(int hp, int attackPower, int defense, String skinName) {
-        super(hp, attackPower, defense, skinName);
+    public ComputerPlayer(int hp, int defense, String skinName, int damage, double hitChance, double variabilty) {
+        super(hp, defense, skinName, damage, hitChance, variabilty);
         startSecond = true;
 
    

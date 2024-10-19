@@ -1,23 +1,20 @@
 package Game;
 
 import java.awt.*;
-import java.util.Random;
 import javax.swing.*;
-
+import java.util.Random;
 public class Player {
     protected int hp;
-    protected int attackPower;
     protected int defense;
     protected Image skin;
-
-    public Player(int hp, int attackPower, int defense, String skinName) {
+    protected Attack attack;
+    protected Random random = new Random();
+    public Player(int hp, int defense, String skinName, int damage, double hitChance, double variabilty) {
         this.hp = hp;
-        this.attackPower = attackPower;
         this.defense = defense;
         skin = new ImageIcon(getClass().getResource(skinName)).getImage();
-
+        attack=new Attack(damage,hitChance,variabilty);
     }
-
 
     
     
@@ -31,11 +28,9 @@ public class Player {
     }
     
     
-    public void addAttackPower(int dmg) {
-        this.attackPower += dmg;
-        
+    public void addDamage(int dmg) {
+        this.attack.addDamage(dmg);
     }
-
 
 
     public Image getSkin() {
@@ -51,7 +46,8 @@ public class Player {
     }
 
     public int getAttackPower() {
-        return attackPower;
+
+        return this.attack.getDamage();
     }
 
     public int getDefense() {

@@ -10,8 +10,6 @@ public class AlienBattleGame extends JPanel {
     
     private Player player;
     private ComputerPlayer computer;
-
-    private boolean playerTurn = true; // Player 1 starts the game
     private boolean playerDefenceActive = false;
 
 
@@ -50,7 +48,6 @@ public class AlienBattleGame extends JPanel {
     private int computerAttackX; // X position for the computer's attack animation
     private int computerAttackY;
 
-    private boolean isAnimatingPlayerAttack = false; // To check if the player's attack animation is running
     private String[] skinsP = new String[] {
             "blue-player.png", "red-player.png", "green-player.png" };
     private String[] skinsC = new String[] {
@@ -70,8 +67,8 @@ public class AlienBattleGame extends JPanel {
 
 
         // Initialize player 1 (human) and player 2 (computer)
-        player = new Player(100, 20, 10, skinsP[random.nextInt(3)]);
-        computer = new ComputerPlayer(100, 15, 10, skinsC[random.nextInt(3)]);
+        player = new Player(100, 10, skinsP[random.nextInt(3)], 20, 0.8, 0.1);
+        computer = new ComputerPlayer(100, 10, skinsC[random.nextInt(3)],20, 0.8, 0.1);
 
         // Initialize player  and  computer
         
@@ -218,7 +215,7 @@ public class AlienBattleGame extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 
-                    player.addAttackPower(statsMenuDamage);
+                    player.addDamage(statsMenuDamage);
                     statsMenuLabel.setVisible(false);
                     toggleButtons(true);
         
@@ -427,36 +424,6 @@ private void computerTurn() {
         }
         
     });
-
-
-                // If the computer decides to attack
-                if (action.equals("attack")) {
-                    startComputerAttackAnimation(); // Start the computer's attack animation
-
-                    // Execute attack logic
-                    int damage = Math.max(computer.getAttackPower() - player.getDefense(), 0);
-                    player.takeDamage(damage);
-                    updateHPLabel();
-                    checkVictory();
-                    messageLabelComputer.setIcon(attackIcon);
-
-                    // If the computer decides to shield
-                } else {
-                    messageLabelComputer.setIcon(defenceIcon);
-                    computer.setDefence(10);
-                    computerDefenceActive = true;
-
-                }
-
-                // Switch back to Player's turn after computer's move
-                playerTurn = true;
-
-                // Stop the timer after the computer has made its move
-                messageLabelComputer.setVisible(true);
-                ((Timer) e.getSource()).stop();
-            }
-        });
-
         // Start the timer (after 2 seconds, the computer's move will execute)
         computerMoveTimer.setRepeats(false); // Ensure it only runs once
         computerMoveTimer.start();
@@ -491,7 +458,7 @@ private void computerTurn() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Create a new computer opponent after 1 second
-                    computer = new ComputerPlayer(100, 10, 5, skinsC[random.nextInt(3)]);
+                    computer = new ComputerPlayer(100, 5, skinsC[random.nextInt(3)],20, 0.8, 0.1);
                     
                     // Reset the opponent's HP label
                     opponenHPLabel.setText(" HP: " + computer.getHP());
