@@ -510,8 +510,8 @@ private void computerTurn() {
                 statsMenuHp = 5;
         
                 addHPButton.setText("+" + statsMenuHp +" HP" );
-                addDmgButton.setText("+" + statsMenuHp +" AD" );
-                addDefenceButton.setText("+" + statsMenuHp +" Def" );
+                addDmgButton.setText("+" + statsMenuDamage +" AD" );
+                addDefenceButton.setText("+" + statMenuDefence +" Def" );
     
                 statsMenuLabel.setVisible(true);
                 
