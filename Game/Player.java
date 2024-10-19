@@ -29,6 +29,7 @@ public class Player {
         this.defense += extraDef;
     }
     
+    
     public void addAttackPower(int dmg) {
         this.attackPower += dmg;
         
