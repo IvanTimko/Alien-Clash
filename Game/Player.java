@@ -18,13 +18,25 @@ public class Player {
 
     }
 
-    public void setDefence(int extraDef) {
+
+    
+    
+    public void addHP(int extraHp) {
+        this.hp += extraHp;
+    }
+    
+    public void addDefence(int extraDef) {
+
         this.defense += extraDef;
     }
+    
+    
+    public void addAttackPower(int dmg) {
+        this.attackPower += dmg;
+        
+    }
 
-    // public void setRandomSkin() {
-    // this.skin = new ImageIcon(getClass().getResource(skinName)).getImage();
-    // }
+
 
     public Image getSkin() {
         return skin;
