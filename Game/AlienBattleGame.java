@@ -119,20 +119,36 @@ public class AlienBattleGame extends JPanel {
 
         //Stats boost menu + buttons
         statsMenuLabel = new JLabel();
-        statsMenuLabel.setBackground(Color.BLACK);
+        statsMenuLabel.setBackground(new Color(0,0,0,255));
         statsMenuLabel.setBounds(100, 100, 600,400); 
         this.add(statsMenuLabel);
         statsMenuLabel.setOpaque(true);
         this.setComponentZOrder(statsMenuLabel, 0);
         statsMenuLabel.setVisible(false);
+
         addDmgButton = new JButton("extra damage");
-        addDmgButton.setBackground(Color.BLACK);
         addDmgButton.setBounds(45, 100, 150, 200);
+        addDmgButton.setBackground(new Color(75,44,111));
+        addDmgButton.setForeground(new Color(49,91,164));
+        addDmgButton.setFont(new Font("Orbitron", Font.BOLD, 27));
+        addDmgButton.setOpaque(true);
+        addDmgButton.setBorderPainted(false);
+        
         addDefenceButton = new JButton("extra def");
         addDefenceButton.setBounds(45 + 180 , 100, 150, 200);
-        addDefenceButton.setBackground(Color.RED);
+        addDefenceButton.setFont(new Font("Orbitron", Font.BOLD, 27));
+        addDefenceButton.setForeground(new Color(49,91,164));
+        addDefenceButton.setBackground(new Color(75,44,111));
+        addDefenceButton.setOpaque(true);
+        addDefenceButton.setBorderPainted(false);
+
         addHPButton = new JButton("heal");
         addHPButton.setBounds(45 + 360, 100, 150, 200);
+        addHPButton.setFont(new Font("Orbitron", Font.BOLD, 27));
+        addHPButton.setForeground(new Color(49,91,164));
+        addHPButton.setBackground(new Color(75,44,111));
+        addHPButton.setOpaque(true);
+        addHPButton.setBorderPainted(false);
         
         statsMenuLabel.add(addDmgButton);
         statsMenuLabel.add(addHPButton);
@@ -492,9 +508,11 @@ private void computerTurn() {
                 statMenuDefence = 3;
                 statsMenuDamage = 4;
                 statsMenuHp = 5;
-                addDefenceButton.setFont(new Font("Orbitron", Font.BOLD, 20));
-                
-                addDefenceButton.setText("+" + statsMenuHp + "HP");
+        
+                addHPButton.setText("+" + statsMenuHp +" HP" );
+                addDmgButton.setText("+" + statsMenuHp +" AD" );
+                addDefenceButton.setText("+" + statsMenuHp +" Def" );
+    
                 statsMenuLabel.setVisible(true);
                 
                 // Stop the timer after the task is executed
