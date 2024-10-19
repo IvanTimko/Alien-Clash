@@ -9,23 +9,24 @@ public class Player {
     protected int attackPower;
     protected int defense;
     protected Image skin;
-    protected String[] Skins = new String[] {
-            "blue-player.png", "red-player.png", "green-player.png" };
-    protected Random random = new Random();
 
-    public Player(int hp, int attackPower, int defense) {
+    public Player(int hp, int attackPower, int defense, String skinName) {
         this.hp = hp;
         this.attackPower = attackPower;
         this.defense = defense;
-        skin = new ImageIcon(getClass().getResource(Skins[random.nextInt(3)])).getImage();
+        skin = new ImageIcon(getClass().getResource(skinName)).getImage();
 
     }
+
+
+    
     
     public void addHP(int extraHp) {
         this.hp += extraHp;
     }
     
     public void addDefence(int extraDef) {
+
         this.defense += extraDef;
     }
     
@@ -35,10 +36,7 @@ public class Player {
         
     }
 
-    public void setRandomSkin() {
-        this.skin = new ImageIcon(getClass().getResource(Skins[random.nextInt(3)])).getImage();
-    }
-    
+
 
     public Image getSkin() {
         return skin;
