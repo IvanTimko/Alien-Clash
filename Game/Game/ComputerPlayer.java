@@ -5,14 +5,9 @@ import java.util.Random;
 public class ComputerPlayer extends Player {
     boolean startSecond;
 
-
-    public ComputerPlayer(int hp, int defense, String skinName, int damage, double hitChance, double variabilty) {
-        super(hp, defense, skinName, damage, hitChance, variabilty);
+    public ComputerPlayer(int hp, double defense, String skinName, Attack at1, Attack at2, Attack ulti) {
+        super(hp, defense, skinName, at1, at2, ulti);
         startSecond = true;
-
-   
-        
-        
 
     }
 
@@ -20,13 +15,14 @@ public class ComputerPlayer extends Player {
     public String getAction() {
         // Randomly choose between "attack" and "shield" actions for computer
         Random random = new Random();
-        return random.nextBoolean() ? "attack" : "shield";
+        return random.nextBoolean() ? "attack1" : "shield";
     }
 
     public boolean getStart() {
         return startSecond;
     }
-    //fixes the bug when new computer is created,otherwise it will not attack
+
+    // fixes the bug when new computer is created,otherwise it will not attack
     public void setStart() {
         this.startSecond = false;
     }

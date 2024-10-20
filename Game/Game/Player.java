@@ -3,35 +3,40 @@ package Game;
 import java.awt.*;
 import javax.swing.*;
 import java.util.Random;
+
 public class Player {
     protected int hp;
-    protected int defense;
+    protected double defense;
     protected Image skin;
-    protected Attack attack;
+    protected Attack attack1;
+    protected Attack attack2;
+    protected Attack ultimate;
     protected Random random = new Random();
-    public Player(int hp, int defense, String skinName, int damage, double hitChance, double variabilty) {
+
+    public Player(int hp, double defense, String skinName, Attack at1, Attack at2, Attack ulti) {
         this.hp = hp;
         this.defense = defense;
         skin = new ImageIcon(getClass().getResource(skinName)).getImage();
-        attack=new Attack(damage,hitChance,variabilty);
+        this.attack1 = at1;
+        this.attack2 = at2;
+        this.ultimate = ulti;
     }
 
-    
-    
     public void addHP(int extraHp) {
         this.hp += extraHp;
     }
-    
+
     public void addDefence(int extraDef) {
 
-        this.defense += extraDef;
-    }
-    
-    
-    public void addDamage(int dmg) {
-        this.attack.addDamage(dmg);
+        this.defense += extraDef / 100;
     }
 
+    public void addDamage(int dmg) {
+        this.attack1.addDamage(dmg);
+        this.attack2.addDamage(dmg);
+        this.ultimate.addDamage(dmg);
+
+    }
 
     public Image getSkin() {
         return skin;
@@ -45,20 +50,31 @@ public class Player {
         this.hp = hp;
     }
 
-    public int getAttackPower() {
+    public double getAttack1Power() {
 
-        return this.attack.getDamage();
+        return this.attack1.getDamagePower();
     }
 
-    public int getDefense() {
+    public double getAttack2Power() {
+
+        return this.attack2.getDamagePower();
+    }
+
+    public double getUltimatePower() {
+
+        return this.ultimate.getDamagePower();
+    }
+
+    public double getDefense() {
         return defense;
     }
 
-    public void takeDamage(int damage) {
-        this.hp -= damage;
+    public void takeDamage(double damage) {
+        this.hp -= Math.round(damage * (1 - defense));
+        System.out.println(damage);
     }
 
     public String getAction() {
-        return "attack"; // default action for human, overridden by computer player
+        return "attack1"; // default action for human, overridden by computer player
     }
 }
