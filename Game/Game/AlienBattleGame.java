@@ -7,18 +7,14 @@ import java.awt.event.ActionListener;
 import java.util.Random;
 
 public class AlienBattleGame extends JPanel {
-    
+
     private Player player;
     private ComputerPlayer computer;
     private boolean playerDefenceActive = false;
 
-
-    
-
     private boolean computerDefenceActive = false;
     private boolean isAnimatingPlayerAttack = false; // To check if the player's attack animation is running
     private boolean isAnimatingComputerAttack = false; // To check if the computer's attack animation is running
-
 
     private JLabel playerHPLabel;
     private JLabel opponenHPLabel;
@@ -37,7 +33,6 @@ public class AlienBattleGame extends JPanel {
     private ImageIcon defenceIcon;
     private JFrame frame;
 
-    
     private int statsMenuDamage;
     private int statsMenuHp;
     private int statMenuDefence;
@@ -54,9 +49,6 @@ public class AlienBattleGame extends JPanel {
             "blue-computer.png", "red-computer.png", "green-computer.png" };
     private Random random = new Random();
 
-   
-
-
     public AlienBattleGame() {
 
         // Initialize the frame
@@ -65,20 +57,24 @@ public class AlienBattleGame extends JPanel {
         frame.setResizable(false);
         repaint();
 
-
         // Initialize player 1 (human) and player 2 (computer)
-        player = new Player(100, 10, skinsP[random.nextInt(3)], 20, 0.8, 0.1);
-        computer = new ComputerPlayer(100, 10, skinsC[random.nextInt(3)],20, 0.8, 0.1);
+        player = new Player(100, 0.1, skinsP[random.nextInt(3)],
+                new Attack(15, 0.8, 0.15),
+                new Attack(25, 0.65, 0.22),
+                new Attack(35, 0.7, 0.1));
+        computer = new ComputerPlayer(100, 0.1, skinsC[random.nextInt(3)],
+                new Attack(15, 0.8, 0.15),
+                new Attack(25, 0.65, 0.22),
+                new Attack(35, 0.7, 0.1));
 
-        // Initialize player  and  computer
-        
+        // Initialize player and computer
 
         // Main game panel
         this.setLayout(null);
         this.setPreferredSize(new Dimension(800, 600));
         this.setBackground(Color.BLACK);
 
-        //Computer attack / defense ability icons
+        // Computer attack / defense ability icons
         attackIcon = new ImageIcon(getClass().getResource("attackLabel.png"));
         defenceIcon = new ImageIcon(getClass().getResource("shieldLabel.png"));
 
@@ -94,13 +90,6 @@ public class AlienBattleGame extends JPanel {
         this.add(playerHPLabel);
         this.add(opponenHPLabel);
 
-        
-
-        
-
-        
-
-
         // Label for Last action of computer
         messageLabelComputer = new JLabel(" ‎ ");
         messageLabelComputer.setForeground(Color.WHITE);
@@ -112,7 +101,7 @@ public class AlienBattleGame extends JPanel {
         shieldButton.setBounds(100, 450, 600, 50);
         shieldButton.setIcon(new ImageIcon(this.getClass().getResource("defence.png")));
         // attack 1 button set-up
-        attack1Button = new JButton("Attack");
+        attack1Button = new JButton("Attack1");
         attack1Button.setBounds(100, 510, 180, 50);
         attack1Button.setIcon(new ImageIcon(this.getClass().getResource("attack1.png")));
         // attack 2 button set-up
@@ -137,10 +126,10 @@ public class AlienBattleGame extends JPanel {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        //Stats boost menu + buttons
+        // Stats boost menu + buttons
         statsMenuLabel = new JLabel();
-        statsMenuLabel.setBackground(new Color(0,0,0,255));
-        statsMenuLabel.setBounds(100, 100, 600,400); 
+        statsMenuLabel.setBackground(new Color(0, 0, 0, 255));
+        statsMenuLabel.setBounds(100, 100, 600, 400);
         this.add(statsMenuLabel);
         statsMenuLabel.setOpaque(true);
         this.setComponentZOrder(statsMenuLabel, 0);
@@ -148,28 +137,28 @@ public class AlienBattleGame extends JPanel {
 
         addDmgButton = new JButton("extra damage");
         addDmgButton.setBounds(45, 100, 150, 200);
-        addDmgButton.setBackground(new Color(75,44,111));
-        addDmgButton.setForeground(new Color(49,91,164));
+        addDmgButton.setBackground(new Color(75, 44, 111));
+        addDmgButton.setForeground(new Color(49, 91, 164));
         addDmgButton.setFont(new Font("Orbitron", Font.BOLD, 27));
         addDmgButton.setOpaque(true);
         addDmgButton.setBorderPainted(false);
-        
+
         addDefenceButton = new JButton("extra def");
-        addDefenceButton.setBounds(45 + 180 , 100, 150, 200);
+        addDefenceButton.setBounds(45 + 180, 100, 150, 200);
         addDefenceButton.setFont(new Font("Orbitron", Font.BOLD, 27));
-        addDefenceButton.setForeground(new Color(49,91,164));
-        addDefenceButton.setBackground(new Color(75,44,111));
+        addDefenceButton.setForeground(new Color(49, 91, 164));
+        addDefenceButton.setBackground(new Color(75, 44, 111));
         addDefenceButton.setOpaque(true);
         addDefenceButton.setBorderPainted(false);
 
         addHPButton = new JButton("heal");
         addHPButton.setBounds(45 + 360, 100, 150, 200);
         addHPButton.setFont(new Font("Orbitron", Font.BOLD, 27));
-        addHPButton.setForeground(new Color(49,91,164));
-        addHPButton.setBackground(new Color(75,44,111));
+        addHPButton.setForeground(new Color(49, 91, 164));
+        addHPButton.setBackground(new Color(75, 44, 111));
         addHPButton.setOpaque(true);
         addHPButton.setBorderPainted(false);
-        
+
         statsMenuLabel.add(addDmgButton);
         statsMenuLabel.add(addHPButton);
         statsMenuLabel.add(addDefenceButton);
@@ -179,87 +168,81 @@ public class AlienBattleGame extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-               
-
-                
-                    
-                    startPlayerAttackAnimation();  // Player attack
-                    // Execute attack logic
-                    playerAction("attack", player, computer);
-                
+                startPlayerAttackAnimation(); // Player attack
+                // Execute attack logic
+                playerAction("attack1", player, computer);
 
             }
         });
 
+        attack2Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                startPlayerAttackAnimation(); // Player attack
+                // Execute attack logic
+                playerAction("attack2", player, computer);
+
+            }
+        });
         shieldButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-               
-                    playerAction("shield", player, computer);
-                
+
+                playerAction("shield", player, computer);
+
             }
         });
 
         ultimateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
-                    playerAction("ultimate", player, computer);
-                    startPlayerAttackAnimation();  // Player attack
-                
+
+                playerAction("ultimate", player, computer);
+                startPlayerAttackAnimation(); // Player attack
+
             }
         });
 
-        
         addDmgButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
-                    player.addDamage(statsMenuDamage);
-                    statsMenuLabel.setVisible(false);
-                    toggleButtons(true);
-        
-                    computer.setStart();
-                    
-                    
-                    
-                
+
+                player.addDamage(statsMenuDamage);
+                statsMenuLabel.setVisible(false);
+                toggleButtons(true);
+
+                computer.setStart();
+
             }
         });
         addHPButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
-                    player.addHP(statsMenuHp);
-                    if (player.getHP() > 100 ) {
-                        player.setHP(100);
-                    }
-                    updateHPLabel();
-                    statsMenuLabel.setVisible(false);
-                    toggleButtons(true);
-                    computer.setStart();
-                    
-                    
-                    
-                    
-                
+
+                player.addHP(statsMenuHp);
+                if (player.getHP() > 100) {
+                    player.setHP(100);
+                }
+                updateHPLabel();
+                statsMenuLabel.setVisible(false);
+                toggleButtons(true);
+                computer.setStart();
+
             }
         });
         addDefenceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                
-                    player.addDefence(statMenuDefence);
-                    statsMenuLabel.setVisible(false);
-                    toggleButtons(true);
-                    computer.setStart();
-                    
-                    
-                    
-                
+
+                player.addDefence(statMenuDefence);
+                statsMenuLabel.setVisible(false);
+                toggleButtons(true);
+                computer.setStart();
+
             }
         });
-        
+
     }
 
     // Start the player attack animation
@@ -280,7 +263,6 @@ public class AlienBattleGame extends JPanel {
                     ((Timer) e.getSource()).stop();
                     isAnimatingPlayerAttack = false;
 
-                    
                 }
 
                 repaint(); // Repaint to show the animation frame
@@ -318,17 +300,14 @@ public class AlienBattleGame extends JPanel {
 
     // Method to handle player actions (attack/shield)
     private void playerAction(String action, Player player, Player opponent) {
-        int damage;
+        double damage;
         // increment of ultimate loader
         ultimateLoaderCT++;
 
-
-     
-
-        //player starts each new round
+        // player starts each new round
         roundCounter++;
-        
-        //enhanced defence is only active for one round than it reverts back to base
+
+        // enhanced defence is only active for one round than it reverts back to base
 
         if (playerDefenceActive) {
             playerDefenceActive = false;
@@ -336,8 +315,13 @@ public class AlienBattleGame extends JPanel {
 
         }
 
-        if (action.equals("attack")) {
-            damage = Math.max(player.getAttackPower() - opponent.getDefense(), 0);
+        if (action.equals("attack1")) {
+            damage = player.getAttack1Power();
+            opponent.takeDamage(damage);
+            updateHPLabel();
+            checkVictory();
+        } else if (action.equals("attack2")) {
+            damage = player.getAttack2Power();
             opponent.takeDamage(damage);
             updateHPLabel();
             checkVictory();
@@ -347,7 +331,7 @@ public class AlienBattleGame extends JPanel {
             playerDefenceActive = true;
 
         } else if (action.equals("ultimate")) {
-            damage = Math.max(player.getAttackPower()*2 - opponent.getDefense(), 0);
+            damage = player.getUltimatePower();
             opponent.takeDamage(damage);
             ultimateLoaderCT = 0;
             updateHPLabel();
@@ -355,75 +339,64 @@ public class AlienBattleGame extends JPanel {
 
         }
 
-
-       
-
-
-        
-        
-        //checks if the Stats boost menu should open
+        // checks if the Stats boost menu should open
         isStatsBoost(roundCounter);
         computer.setStart();
 
         computerTurn();
-        
+
     }
 
     // Computer's turn logic
 
-    
+    private void computerTurn() {
 
+        messageLabelComputer.setVisible(false);
 
-private void computerTurn() {
-    
-    messageLabelComputer.setVisible(false);
-    
-    // Create a Swing Timer to delay the computer's move by 2.5 seconds (2500 milliseconds)
-    Timer computerMoveTimer = new Timer(2500, new ActionListener() {
-        
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            if (computer.getHP() != 100 || !computer.getStart()) {
-                // Get the computer's action (either attack or shield)
-                String action = computer.getAction();
-                if (roundCounter % 3 != 0) {
-                toggleButtons(true);
+        // Create a Swing Timer to delay the computer's move by 2.5 seconds (2500
+        // milliseconds)
+        Timer computerMoveTimer = new Timer(2500, new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (computer.getHP() != 100 || !computer.getStart()) {
+                    // Get the computer's action (either attack or shield)
+                    String action = computer.getAction();
+                    if (roundCounter % 3 != 0) {
+                        toggleButtons(true);
+                    }
+                    if (computerDefenceActive) {
+                        computerDefenceActive = false;
+                        computer.addDefence(-10);
+                    }
+
+                    // If the computer decides to attack
+                    if (action.equals("attack1")) {
+                        startComputerAttackAnimation(); // Start the computer's attack animation
+
+                        // Execute attack logic
+                        double damage = Math.max(computer.getAttack1Power() - player.getDefense(), 0);
+                        player.takeDamage(damage);
+                        updateHPLabel();
+                        checkVictory();
+                        messageLabelComputer.setIcon(attackIcon);
+
+                        // If the computer decides to shield
+                    } else {
+                        messageLabelComputer.setIcon(defenceIcon);
+                        computer.addDefence(10);
+                        computerDefenceActive = true;
+
+                    }
+
+                    // Stop the timer after the computer has made its move
+                    messageLabelComputer.setVisible(true);
+                    ((Timer) e.getSource()).stop();
                 }
-                if (computerDefenceActive) {
-                    computerDefenceActive = false;
-                    computer.addDefence(-10);
-                }
 
-                // If the computer decides to attack
-                if (action.equals("attack")) {
-                    startComputerAttackAnimation();  // Start the computer's attack animation
-
-                    // Execute attack logic
-                    int damage = Math.max(computer.getAttackPower() - player.getDefense(), 0);
-                    player.takeDamage(damage);
-                    updateHPLabel();
-                    checkVictory();
-                    messageLabelComputer.setIcon(attackIcon);
-
-                // If the computer decides to shield
-                } else {
-                    messageLabelComputer.setIcon(defenceIcon);
-                    computer.addDefence(10);
-                    computerDefenceActive = true;
-                    
-                }
-
-                
-
-
-                // Stop the timer after the computer has made its move
-                messageLabelComputer.setVisible(true);
-                ((Timer) e.getSource()).stop();
             }
 
-        }
-        
-    });
+        });
         // Start the timer (after 2 seconds, the computer's move will execute)
         computerMoveTimer.setRepeats(false); // Ensure it only runs once
         computerMoveTimer.start();
@@ -445,43 +418,36 @@ private void computerTurn() {
             messageLabelComputer.setText("Game Over - You lost!");
         } else if (computer.getHP() <= 0) {
 
-            
-            
-
-
             isStatsBoost(0); // Trigger stats boost if needed
             roundCounter = 0;
-            
-            
+
             // Create a timer to delay for 1 second (1000ms)
             Timer timer = new Timer(1000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Create a new computer opponent after 1 second
-                    computer = new ComputerPlayer(100, 5, skinsC[random.nextInt(3)],20, 0.8, 0.1);
-                    
+                    computer = new ComputerPlayer(100, 0.05, skinsC[random.nextInt(3)],
+                            new Attack(15, 0.8, 0.15),
+                            new Attack(25, 0.65, 0.22),
+                            new Attack(35, 0.7, 0.1));
+
                     // Reset the opponent's HP label
                     opponenHPLabel.setText(" HP: " + computer.getHP());
-                    
-                    
-    
-                    
+
                     // Update the game display
                     repaint();
-                    
+
                     // Stop the timer after it's done
                     ((Timer) e.getSource()).stop();
                 }
             });
-            
+
             // Start the timer
             timer.setRepeats(false); // Only run once
             timer.start();
 
         }
     }
-
-    
 
     // Disable buttons after the game ends
     private void disableButtons() {
@@ -508,10 +474,6 @@ private void computerTurn() {
             g.drawImage(computer.getSkin(), 600, 100, 75, 150, this);
         }
 
-
-        
-
-        
         drawHealthBar(g, player.getHP(), 100, 50, 200, 200, 20, Color.GREEN);
 
         drawHealthBar(g, computer.getHP(), 100, 530, 60, 200, 20, Color.RED);
@@ -548,22 +510,20 @@ private void computerTurn() {
         attack2Button.setVisible(val);
         shieldButton.setVisible(val);
 
-        
+        if (ultimateLoaderCT >= 4 || !val) {
+            ultimateButton.setVisible(val);
 
-
-        if (ultimateLoaderCT >= 4 || val == false) {
-        ultimateButton.setVisible(val);
-        
         }
     }
-    
+
     private void isStatsBoost(int roundCounter) {
         if (roundCounter % 3 == 0) {
             initStatsBoost();
         }
 
     }
-    //INPUT WILL BE LEVEL
+
+    // INPUT WILL BE LEVEL
     private void initStatsBoost() {
         toggleButtons(false);
         // Create a Timer to delay the execution by 4.5 second (4500 milliseconds)
@@ -574,28 +534,25 @@ private void computerTurn() {
                 statMenuDefence = 3;
                 statsMenuDamage = 4;
                 statsMenuHp = 5;
-        
-                addHPButton.setText("+" + statsMenuHp +" HP" );
-                addDmgButton.setText("+" + statsMenuDamage +" AD" );
-                addDefenceButton.setText("+" + statMenuDefence +" Def" );
-    
+
+                addHPButton.setText("+" + statsMenuHp + " HP");
+                addDmgButton.setText("+" + statsMenuDamage + " AD");
+                addDefenceButton.setText("+" + statMenuDefence + " Def");
+
                 statsMenuLabel.setVisible(true);
-                
+
                 // Stop the timer after the task is executed
                 ((Timer) e.getSource()).stop();
-                
+
             }
         });
-        
+
         // Ensure the timer only runs once
         delayTimer.setRepeats(false);
-        
+
         // Start the timer (after 4.5 second, the action will execute)
         delayTimer.start();
-        
-        
+
     }
-    
-    
 
 }
