@@ -48,9 +48,12 @@ public class AlienBattleGame extends JPanel {
     private String[] skinsC = new String[] {
             "blue-computer.png", "red-computer.png", "green-computer.png" };
     private Random random = new Random();
+    private String alienChoice;
 
-    public AlienBattleGame() {
+    public AlienBattleGame(String alienChoice) {
 
+        // players choice of alien
+        this.alienChoice = alienChoice;
         // Initialize the frame
         frame = new JFrame("Alien Clash");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
