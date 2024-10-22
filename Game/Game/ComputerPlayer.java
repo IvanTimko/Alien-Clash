@@ -5,11 +5,14 @@ import java.util.Random;
 public class ComputerPlayer extends Player {
     boolean startSecond;
 
-    public ComputerPlayer(int hp, double defense, String skinName, Attack at1, Attack at2, Attack ulti) {
-        super(hp, defense, skinName, at1, at2, ulti);
+    public ComputerPlayer(String PlayerType, int hp, Attack attack1, Attack attack2, Attack ultimate, double defense,
+            double generationVariabilty,String skinName) {
+        super(PlayerType,hp, attack1,attack2,  ultimate,defense,
+             generationVariabilty,skinName);
+        
         startSecond = true;
+        }
 
-    }
 
     @Override
     public String getAction() {

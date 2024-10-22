@@ -48,24 +48,32 @@ public class AlienBattleGame extends JPanel {
     private String[] skinsC = new String[] {
             "pictures/blue-computer.png", "pictures/red-computer.png", "pictures/green-computer.png" };
     private Random random = new Random();
-
-    public AlienBattleGame(int skin) {
+    private String skin;
+    public AlienBattleGame(String skin) {
 
         // Initialize the frame
+        this.skin = skin;
         frame = new JFrame("Alien Clash");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         repaint();
 
         // Initialize player 1 (human) and player 2 (computer)
-        player = new Player(100, 0.1, skinsP[skin],
-                new Attack(15, 0.8, 0.15),
-                new Attack(25, 0.65, 0.22),
-                new Attack(35, 0.7, 0.1));
+        String[] alienTypeColors = new String[]{"red","green","blue"};
+
+        if (skin.equals("red")) {
+            player=RED_Player_BASE;
+        } else if (skin.equals("blue")) {
+            player=BlUE_Player_BASE;
+        } else if (skin.equals("green")) {
+            player=GREEN_Player_BASE;
+        }
+
         computer = new ComputerPlayer(100, 0.1, skinsC[random.nextInt(3)],
                 new Attack(15, 0.8, 0.15),
                 new Attack(25, 0.65, 0.22),
                 new Attack(35, 0.7, 0.1));
+
 
         // Initialize player and computer
 

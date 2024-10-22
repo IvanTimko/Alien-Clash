@@ -81,7 +81,7 @@ public class StartMenu extends JFrame {
                 dispose(); // Close the start menu
                 // create button selection
 
-                new AlienBattleGame(1); // Start the game
+                new AlienBattleGame("red"); // Start the game
             }
         });
         // Button action listener
@@ -92,7 +92,7 @@ public class StartMenu extends JFrame {
                 dispose(); // Close the start menu
                 // create button selection
 
-                new AlienBattleGame(0); // Start the game
+                new AlienBattleGame("blue"); // Start the game
             }
         });
         // Button action listener
@@ -103,7 +103,7 @@ public class StartMenu extends JFrame {
                 dispose(); // Close the start menu
                 // create button selection
 
-                new AlienBattleGame(2); // Start the game
+                new AlienBattleGame("green"); // Start the game
             }
         });
 
