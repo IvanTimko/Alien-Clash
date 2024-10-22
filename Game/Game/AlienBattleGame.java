@@ -44,12 +44,12 @@ public class AlienBattleGame extends JPanel {
     private int computerAttackY;
 
     private String[] skinsP = new String[] {
-            "blue-player.png", "red-player.png", "green-player.png" };
+            "pictures/blue-player.png", "pictures/red-player.png", "pictures/green-player.png" };
     private String[] skinsC = new String[] {
-            "blue-computer.png", "red-computer.png", "green-computer.png" };
+            "pictures/blue-computer.png", "pictures/red-computer.png", "pictures/green-computer.png" };
     private Random random = new Random();
 
-    public AlienBattleGame() {
+    public AlienBattleGame(int skin) {
 
         // Initialize the frame
         frame = new JFrame("Alien Clash");
@@ -58,7 +58,7 @@ public class AlienBattleGame extends JPanel {
         repaint();
 
         // Initialize player 1 (human) and player 2 (computer)
-        player = new Player(100, 0.1, skinsP[random.nextInt(3)],
+        player = new Player(100, 0.1, skinsP[skin],
                 new Attack(15, 0.8, 0.15),
                 new Attack(25, 0.65, 0.22),
                 new Attack(35, 0.7, 0.1));
@@ -75,8 +75,8 @@ public class AlienBattleGame extends JPanel {
         this.setBackground(Color.BLACK);
 
         // Computer attack / defense ability icons
-        attackIcon = new ImageIcon(getClass().getResource("attackLabel.png"));
-        defenceIcon = new ImageIcon(getClass().getResource("shieldLabel.png"));
+        attackIcon = new ImageIcon(getClass().getResource("pictures/attackLabel.png"));
+        defenceIcon = new ImageIcon(getClass().getResource("pictures/shieldLabel.png"));
 
         // Player HP labels
         playerHPLabel = new JLabel(" HP: " + player.getHP());
@@ -99,19 +99,19 @@ public class AlienBattleGame extends JPanel {
         // shield button set-up
         shieldButton = new JButton("Shield");
         shieldButton.setBounds(100, 450, 600, 50);
-        shieldButton.setIcon(new ImageIcon(this.getClass().getResource("defence.png")));
+        shieldButton.setIcon(new ImageIcon(this.getClass().getResource("pictures/defence.png")));
         // attack 1 button set-up
         attack1Button = new JButton("Attack1");
         attack1Button.setBounds(100, 510, 180, 50);
-        attack1Button.setIcon(new ImageIcon(this.getClass().getResource("attack1.png")));
+        attack1Button.setIcon(new ImageIcon(this.getClass().getResource("pictures/attack1.png")));
         // attack 2 button set-up
         attack2Button = new JButton("Attack2");
         attack2Button.setBounds(310, 510, 180, 50);
-        attack2Button.setIcon(new ImageIcon(this.getClass().getResource("attack2.png")));
+        attack2Button.setIcon(new ImageIcon(this.getClass().getResource("pictures/attack2.png")));
         // ultimate button set-up
         ultimateButton = new JButton("Ultimate");
         ultimateButton.setBounds(520, 510, 180, 50);
-        ultimateButton.setIcon(new ImageIcon(this.getClass().getResource("ultimate.png")));
+        ultimateButton.setIcon(new ImageIcon(this.getClass().getResource("pictures/ultimate.png")));
         // ultimate button is not initially available for use
         ultimateButton.setVisible(false);
 
@@ -460,10 +460,10 @@ public class AlienBattleGame extends JPanel {
     }
 
     // Load background
-    Image backgroundImage = new ImageIcon(getClass().getResource("background.jpeg")).getImage();
+    Image backgroundImage = new ImageIcon(getClass().getResource("pictures/background.jpeg")).getImage();
     // Load attack image
-    Image missile = new ImageIcon(getClass().getResource("missile.png")).getImage();
-    Image missileRotated = new ImageIcon(getClass().getResource("missileRotated.png")).getImage();
+    Image missile = new ImageIcon(getClass().getResource("pictures/missile.png")).getImage();
+    Image missileRotated = new ImageIcon(getClass().getResource("pictures/missileRotated.png")).getImage();
 
     @Override
     public void paintComponent(Graphics g) {
@@ -474,9 +474,9 @@ public class AlienBattleGame extends JPanel {
             g.drawImage(computer.getSkin(), 600, 100, 75, 150, this);
         }
 
-        drawHealthBar(g, player.getHP(), 100, 50, 200, 200, 20, Color.GREEN);
+        drawHealthBar(g, player.getHP(), player.getMaxHp(), 50, 200, 200, 20, Color.GREEN);
 
-        drawHealthBar(g, computer.getHP(), 100, 530, 60, 200, 20, Color.RED);
+        drawHealthBar(g, computer.getHP(), computer.getMaxHp(), 530, 60, 200, 20, Color.RED);
 
         // Draw the player's attack animation
         if (isAnimatingPlayerAttack) {

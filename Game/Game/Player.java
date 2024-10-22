@@ -6,6 +6,7 @@ import java.util.Random;
 
 public class Player {
     protected int hp;
+    protected int maxHP;
     protected double defense;
     protected Image skin;
     protected Attack attack1;
@@ -20,6 +21,10 @@ public class Player {
         this.attack1 = at1;
         this.attack2 = at2;
         this.ultimate = ulti;
+        this.maxHP = hp;
+    }
+    public int getMaxHp() {
+        return this.maxHP;
     }
 
     public void addHP(int extraHp) {
@@ -77,4 +82,6 @@ public class Player {
     public String getAction() {
         return "attack1"; // default action for human, overridden by computer player
     }
+    
+
 }

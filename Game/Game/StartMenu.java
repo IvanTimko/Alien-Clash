@@ -14,7 +14,7 @@ public class StartMenu extends JFrame {
         this.setLayout(new BorderLayout());
         this.setLocationRelativeTo(null);
         // Backgroung label
-        JLabel background = new JLabel(new ImageIcon(this.getClass().getResource("background.jpeg")));
+        JLabel background = new JLabel(new ImageIcon(this.getClass().getResource("pictures/background.jpeg")));
         background.setSize(800, 600);
         this.add(background);
         // Title label
@@ -25,7 +25,7 @@ public class StartMenu extends JFrame {
         // Play Game button
         JButton playButton = new JButton("Play Game");
         playButton.setBounds(300, 250, 200, 50);
-        playButton.setIcon(new ImageIcon(this.getClass().getResource("playButton.png")));
+        playButton.setIcon(new ImageIcon(this.getClass().getResource("pictures/playButton.png")));
 
         playButton.setFont(new Font("Serif", Font.PLAIN, 20));
         background.add(playButton, BorderLayout.SOUTH);
@@ -42,21 +42,21 @@ public class StartMenu extends JFrame {
         // Button for Red Alien
         JButton redAlienButton = new JButton("");
         redAlienButton.setBounds(140, 125, 75, 150);
-        redAlienButton.setIcon(new ImageIcon(this.getClass().getResource("red-computer.png")));
+        redAlienButton.setIcon(new ImageIcon(this.getClass().getResource("pictures/red-computer.png")));
         redAlienButton.setOpaque(false);
         redAlienButton.setContentAreaFilled(false);
         redAlienButton.setBorderPainted(false);
         // Button for Blue Alien
         JButton blueAlienButton = new JButton("");
         blueAlienButton.setBounds(259, 125, 75, 150);
-        blueAlienButton.setIcon(new ImageIcon(this.getClass().getResource("blue-computer.png")));
+        blueAlienButton.setIcon(new ImageIcon(this.getClass().getResource("pictures/blue-computer.png")));
         blueAlienButton.setOpaque(false);
         blueAlienButton.setContentAreaFilled(false);
         blueAlienButton.setBorderPainted(false);
         // Button for Green Alien
         JButton greenAlienButton = new JButton("");
         greenAlienButton.setBounds(378, 125, 75, 150);
-        greenAlienButton.setIcon(new ImageIcon(this.getClass().getResource("green-computer.png")));
+        greenAlienButton.setIcon(new ImageIcon(this.getClass().getResource("pictures/green-computer.png")));
         greenAlienButton.setOpaque(false);
         greenAlienButton.setContentAreaFilled(false);
         greenAlienButton.setBorderPainted(false);
@@ -81,7 +81,7 @@ public class StartMenu extends JFrame {
                 dispose(); // Close the start menu
                 // create button selection
 
-                new AlienBattleGame(); // Start the game
+                new AlienBattleGame(1); // Start the game
             }
         });
         // Button action listener
@@ -92,7 +92,7 @@ public class StartMenu extends JFrame {
                 dispose(); // Close the start menu
                 // create button selection
 
-                new AlienBattleGame(); // Start the game
+                new AlienBattleGame(0); // Start the game
             }
         });
         // Button action listener
@@ -103,7 +103,7 @@ public class StartMenu extends JFrame {
                 dispose(); // Close the start menu
                 // create button selection
 
-                new AlienBattleGame(); // Start the game
+                new AlienBattleGame(2); // Start the game
             }
         });
 
