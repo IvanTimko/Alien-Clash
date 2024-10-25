@@ -6,7 +6,6 @@ public class Attack {
     int damage;
     double hitChance;
     double variabilty;
-    int damagePower;
     Random random = new Random();
 
     public Attack(int damage, double hitChance, double variabilty) {

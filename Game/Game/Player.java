@@ -17,25 +17,25 @@ public class Player {
     protected String playerType;
     protected Player base;
 
-    public static final Player RED_Player_BASE = new Player("red", 200,
+    public static final Player RED_Player_BASE = new Player("red", 100,
             new Attack(20, 0.8, 0.1),
             new Attack(25, 0.6, 0.1),
             new Attack(30, 0.9, 0.1),
-            20, 0.1,"pictures/red-computer.png");
-    public static final Player GREEN_Player_BASE = new Player("green", 300,
+            20, 0.1, "pictures/red-computer.png");
+    public static final Player GREEN_Player_BASE = new Player("green", 150,
             new Attack(15, 0.8, 0.1),
             new Attack(20, 0.6, 0.1),
             new Attack(22, 0.9, 0.1),
-            10, 0.1,"pictures/green-computer.png");
-    public static final Player BlUE_Player_BASE = new Player("blue", 150,
+            10, 0.1, "pictures/green-computer.png");
+    public static final Player BlUE_Player_BASE = new Player("blue", 80,
             new Attack(25, 0.8, 0.1),
             new Attack(30, 0.6, 0.1),
             new Attack(35, 0.7, 0.1),
-            25, 0.1,"pictures/blue-computer.png");
+            25, 0.1, "pictures/blue-computer.png");
 
     // basic constructor with all stats as parameters
     public Player(String playerType, int hp, Attack attack1, Attack attack2, Attack ultimate, double defense,
-            double generationVariabilty,String skinName) {
+            double generationVariabilty, String skinName) {
         skin = new ImageIcon(getClass().getResource(skinName)).getImage();
         this.playerType = playerType;
         this.hp = hp;
@@ -47,8 +47,7 @@ public class Player {
         this.maxHP = hp;
 
     }
-    
-    
+
     public int getMaxHp() {
         return this.maxHP;
     }
@@ -101,19 +100,14 @@ public class Player {
     }
 
     public void takeDamage(double damage) {
-        this.hp -= Math.round(damage * (1 - defense));
+        this.hp -= Math.max(Math.round(damage * (1 - this.defense / 100.0)), 0);
         System.out.println(damage);
+
     }
 
     public String getAction() {
         return "attack1"; // default action for human, overridden by computer player
     }
-    
-
-
-
-
-
 
     // base constructor with no stats
     public Player() {
@@ -125,8 +119,6 @@ public class Player {
         this.generationVariabilty = 0;
 
     }
-
-
 
     // returns base Player of the same type as on parameter
     public Player findBase(Player player) {
@@ -150,35 +142,43 @@ public class Player {
             newBase = BlUE_Player_BASE;
         } else if (playerType.equals("green")) {
             newBase = GREEN_Player_BASE;
-            ;
         }
-        this.attack1.damage = (int) Math
-                .round(VaryStat(newBase.attack1.damage * prototype.attack1.damage / prototypeBase.attack1.damage,
-                        newBase.generationVariabilty));
-        this.attack1.hitChance = Math
-                .round(VaryStat(
+        System.out.println(newBase.attack1.damage + "x" + newBase.attack1.hitChance);
+        System.out.println(newBase.attack2.damage + "," + newBase.attack2.hitChance);
+        System.out.println(newBase.ultimate.damage + "," + newBase.ultimate.hitChance);
+        this.attack1 = new Attack((int) Math.round(VaryStat(
+                newBase.attack1.damage * prototype.attack1.damage / prototypeBase.attack1.damage,
+                newBase.generationVariabilty)),
+                Math.round(VaryStat(
                         newBase.attack1.hitChance * prototype.attack1.hitChance / prototypeBase.attack1.hitChance,
-                        newBase.generationVariabilty) * 100)
-                / 100;
-        this.attack2.damage = (int) Math
-                .round(VaryStat(newBase.attack2.damage * prototype.attack2.damage / prototypeBase.attack1.damage,
-                        newBase.generationVariabilty));
-        this.attack2.hitChance = Math.round(
-                VaryStat(newBase.attack2.hitChance * prototype.attack2.hitChance / prototypeBase.attack2.hitChance,
-                        newBase.generationVariabilty) * 100)
-                / 100;
-        this.ultimate.damage = (int) Math
+                        newBase.generationVariabilty) * 100) / 100.0,
+                newBase.attack1.variabilty);
+        System.out.println(this.attack1.damage + "," + this.attack1.hitChance);
+        this.attack2 = new Attack((int) Math.round(VaryStat(
+                newBase.attack2.damage * prototype.attack2.damage / prototypeBase.attack2.damage,
+                newBase.generationVariabilty)),
+                Math.round(VaryStat(
+                        newBase.attack2.hitChance * prototype.attack2.hitChance / prototypeBase.attack2.hitChance,
+                        newBase.generationVariabilty) * 100.0) / 100.0,
+                newBase.attack2.variabilty);
+        System.out.println(this.attack2.damage + "," + this.attack2.hitChance);
+        this.ultimate = new Attack((int) Math
                 .round(VaryStat(newBase.ultimate.damage * prototype.ultimate.damage / prototypeBase.ultimate.damage,
-                        newBase.generationVariabilty));
-        this.ultimate.hitChance = Math.round(
-                VaryStat(newBase.ultimate.hitChance * prototype.ultimate.hitChance / prototypeBase.ultimate.hitChance,
-                        newBase.generationVariabilty) * 100)
-                / 100;
+                        newBase.generationVariabilty)),
+                Math.round(
+                        VaryStat(
+                                newBase.ultimate.hitChance * prototype.ultimate.hitChance
+                                        / prototypeBase.ultimate.hitChance,
+                                newBase.generationVariabilty) * 100.0)
+                        / 100.0,
+                newBase.ultimate.variabilty);
+        System.out.println(this.ultimate.damage + "," + this.ultimate.hitChance);
         this.hp = (int) Math.round(VaryStat(newBase.hp * prototype.hp / prototypeBase.hp,
                 newBase.generationVariabilty));
+        this.maxHP = this.hp;
         this.defense = Math.round(VaryStat(newBase.defense * prototype.defense / prototypeBase.defense,
-                newBase.generationVariabilty) * 100)
-                / 100;
+                newBase.generationVariabilty));
+        System.out.println(this.defense);
         this.skin = newBase.skin;
         this.generationVariabilty = newBase.generationVariabilty;
     }

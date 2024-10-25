@@ -42,6 +42,9 @@ public class AlienBattleGame extends JPanel {
     private int playerAttackY;
     private int computerAttackX; // X position for the computer's attack animation
     private int computerAttackY;
+    private int defenceCountDown;
+    private int computerUltiCountDown;
+    private int computerDefenseCountDown;
 
     private String[] skinsP = new String[] {
             "pictures/blue-player.png", "pictures/red-player.png", "pictures/green-player.png" };
@@ -49,6 +52,8 @@ public class AlienBattleGame extends JPanel {
             "pictures/blue-computer.png", "pictures/red-computer.png", "pictures/green-computer.png" };
     private Random random = new Random();
     private String skin;
+    private String[] alienType = new String[] { "red", "green", "blue" };
+
     public AlienBattleGame(String skin) {
 
         // Initialize the frame
@@ -59,21 +64,22 @@ public class AlienBattleGame extends JPanel {
         repaint();
 
         // Initialize player 1 (human) and player 2 (computer)
-        String[] alienTypeColors = new String[]{"red","green","blue"};
 
         if (skin.equals("red")) {
-            player=RED_Player_BASE;
+            player = player.RED_Player_BASE;
         } else if (skin.equals("blue")) {
-            player=BlUE_Player_BASE;
+            player = player.GREEN_Player_BASE;
         } else if (skin.equals("green")) {
-            player=GREEN_Player_BASE;
+            player = player.BlUE_Player_BASE;
         }
-
-        computer = new ComputerPlayer(100, 0.1, skinsC[random.nextInt(3)],
-                new Attack(15, 0.8, 0.15),
-                new Attack(25, 0.65, 0.22),
-                new Attack(35, 0.7, 0.1));
-
+        String computerType = alienType[random.nextInt(0, 3)];
+        if (computerType.equals("red")) {
+            computer = new ComputerPlayer(Player.RED_Player_BASE, "red");
+        } else if (computerType.equals("blue")) {
+            computer = new ComputerPlayer(Player.BlUE_Player_BASE, "blue");
+        } else if (computerType.equals("green")) {
+            computer = new ComputerPlayer(Player.GREEN_Player_BASE, "green");
+        }
 
         // Initialize player and computer
 
@@ -175,7 +181,7 @@ public class AlienBattleGame extends JPanel {
         attack1Button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                roundCounter++;
                 startPlayerAttackAnimation(); // Player attack
                 // Execute attack logic
                 playerAction("attack1", player, computer);
@@ -186,7 +192,7 @@ public class AlienBattleGame extends JPanel {
         attack2Button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                roundCounter++;
                 startPlayerAttackAnimation(); // Player attack
                 // Execute attack logic
                 playerAction("attack2", player, computer);
@@ -205,7 +211,7 @@ public class AlienBattleGame extends JPanel {
         ultimateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                roundCounter++;
                 playerAction("ultimate", player, computer);
                 startPlayerAttackAnimation(); // Player attack
 
@@ -229,8 +235,8 @@ public class AlienBattleGame extends JPanel {
             public void actionPerformed(ActionEvent e) {
 
                 player.addHP(statsMenuHp);
-                if (player.getHP() > 100) {
-                    player.setHP(100);
+                if (player.getHP() > player.maxHP) {
+                    player.setHP(player.maxHP);
                 }
                 updateHPLabel();
                 statsMenuLabel.setVisible(false);
@@ -312,9 +318,6 @@ public class AlienBattleGame extends JPanel {
         // increment of ultimate loader
         ultimateLoaderCT++;
 
-        // player starts each new round
-        roundCounter++;
-
         // enhanced defence is only active for one round than it reverts back to base
 
         if (playerDefenceActive) {
@@ -328,14 +331,17 @@ public class AlienBattleGame extends JPanel {
             opponent.takeDamage(damage);
             updateHPLabel();
             checkVictory();
+            defenceCountDown--;
         } else if (action.equals("attack2")) {
             damage = player.getAttack2Power();
             opponent.takeDamage(damage);
             updateHPLabel();
             checkVictory();
+            defenceCountDown--;
         } else if (action.equals("shield")) {
-            toggleButtons(false);
-            player.addDefence(10);
+            shieldButton.setVisible(false);
+            player.addDefence(20);
+            defenceCountDown = 4;
             playerDefenceActive = true;
 
         } else if (action.equals("ultimate")) {
@@ -344,14 +350,18 @@ public class AlienBattleGame extends JPanel {
             ultimateLoaderCT = 0;
             updateHPLabel();
             checkVictory();
+            defenceCountDown--;
 
         }
 
         // checks if the Stats boost menu should open
-        isStatsBoost(roundCounter);
-        computer.setStart();
 
-        computerTurn();
+        // if we use shield we can still do our move
+        if (!action.equals("shield")) {
+            computerTurn();
+            isStatsBoost(roundCounter);
+            computer.setStart();
+        }
 
     }
 
@@ -363,37 +373,86 @@ public class AlienBattleGame extends JPanel {
 
         // Create a Swing Timer to delay the computer's move by 2.5 seconds (2500
         // milliseconds)
-        Timer computerMoveTimer = new Timer(2500, new ActionListener() {
+        Timer computerMoveTimer = new Timer(1000, new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (computer.getHP() != 100 || !computer.getStart()) {
+
                     // Get the computer's action (either attack or shield)
-                    String action = computer.getAction();
+                    String action = computer.getAction(ultimateLoaderCT, defenceCountDown, computerUltiCountDown,
+                            computerDefenseCountDown);
+                    System.out.println("attack1: " + player.attack1.damage + ", " + player.attack1.hitChance + ", "
+                            + player.attack1.variabilty
+                            + "attack2: " + player.attack2.damage + ", " + player.attack2.hitChance + ", "
+                            + player.attack2.variabilty
+                            + "ultiamte: " + player.ultimate.damage + ", " + player.ultimate.hitChance + ", "
+                            + player.ultimate.variabilty + ", hp:" + player.hp + " ,defense " + player.defense
+                            + "genvar: " + player.generationVariabilty);
+                    System.out.println("attack1: " + computer.attack1.damage + ", " + computer.attack1.hitChance + ", "
+                            + computer.attack1.variabilty
+                            + "attack2: " + computer.attack2.damage + ", " + computer.attack2.hitChance + ", "
+                            + computer.attack2.variabilty
+                            + "ultiamte: " + computer.ultimate.damage + ", " + computer.ultimate.hitChance + ", "
+                            + computer.ultimate.variabilty + ", hp:" + computer.hp + " ,defense " + computer.defense
+                            + "genvar: " + computer.generationVariabilty);
+                    System.out.println(action);
                     if (roundCounter % 3 != 0) {
                         toggleButtons(true);
                     }
                     if (computerDefenceActive) {
                         computerDefenceActive = false;
-                        computer.addDefence(-10);
+                        computer.addDefence(-30);
                     }
 
                     // If the computer decides to attack
                     if (action.equals("attack1")) {
+                        computerUltiCountDown--;
+                        defenceCountDown--;
                         startComputerAttackAnimation(); // Start the computer's attack animation
 
                         // Execute attack logic
-                        double damage = Math.max(computer.getAttack1Power() - player.getDefense(), 0);
+                        double damage = Math.round(computer.attack1.getDamagePower());
                         player.takeDamage(damage);
+                        System.out.println(player.hp);
                         updateHPLabel();
                         checkVictory();
                         messageLabelComputer.setIcon(attackIcon);
 
                         // If the computer decides to shield
-                    } else {
+                    } else if (action.equals("attack2")) {
+                        computerUltiCountDown--;
+                        defenceCountDown--;
+                        startComputerAttackAnimation(); // Start the computer's attack animation
+
+                        // Execute attack logic
+                        double damage = Math.round(computer.attack2.getDamagePower());
+                        player.takeDamage(damage);
+                        System.out.println(player.hp);
+                        updateHPLabel();
+                        checkVictory();
+                        messageLabelComputer.setIcon(attackIcon);
+
+                        // If the computer decides to shield
+                    } else if (action.equals("ultimate")) {
+                        startComputerAttackAnimation(); // Start the computer's attack animation
+                        computerUltiCountDown = 4;
+                        defenceCountDown--;
+
+                        // Execute attack logic
+                        double damage = Math.round(computer.ultimate.getDamagePower());
+                        player.takeDamage(damage);
+                        System.out.println(player.hp);
+                        updateHPLabel();
+                        checkVictory();
+                        messageLabelComputer.setIcon(attackIcon);
+
+                        // If the computer decides to shield
+                    } else if (action.equals("shield")) {
                         messageLabelComputer.setIcon(defenceIcon);
-                        computer.addDefence(10);
+                        computer.addDefence(30);
                         computerDefenceActive = true;
+                        defenceCountDown = 4;
 
                     }
 
@@ -434,10 +493,7 @@ public class AlienBattleGame extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Create a new computer opponent after 1 second
-                    computer = new ComputerPlayer(100, 0.05, skinsC[random.nextInt(3)],
-                            new Attack(15, 0.8, 0.15),
-                            new Attack(25, 0.65, 0.22),
-                            new Attack(35, 0.7, 0.1));
+                    computer = new ComputerPlayer(player, alienType[random.nextInt(0, 3)]);
 
                     // Reset the opponent's HP label
                     opponenHPLabel.setText(" HP: " + computer.getHP());
@@ -516,11 +572,13 @@ public class AlienBattleGame extends JPanel {
     private void toggleButtons(Boolean val) {
         attack1Button.setVisible(val);
         attack2Button.setVisible(val);
-        shieldButton.setVisible(val);
 
         if (ultimateLoaderCT >= 4 || !val) {
             ultimateButton.setVisible(val);
 
+        }
+        if (defenceCountDown <= 0 || !val) {
+            shieldButton.setVisible(val);
         }
     }
 
