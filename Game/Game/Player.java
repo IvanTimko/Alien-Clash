@@ -72,6 +72,10 @@ public class Player {
         return skin;
     }
 
+    public void setSkin(String skinPath) {
+        this.skin = new ImageIcon(getClass().getResource(skinPath)).getImage();
+    }
+
     public int getHP() {
         return hp;
     }

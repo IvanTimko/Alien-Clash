@@ -67,18 +67,24 @@ public class AlienBattleGame extends JPanel {
 
         if (skin.equals("red")) {
             player = player.RED_Player_BASE;
-        } else if (skin.equals("blue")) {
-            player = player.GREEN_Player_BASE;
+            player.setSkin(skinsP[1]);
         } else if (skin.equals("green")) {
+            player = player.GREEN_Player_BASE;
+            player.setSkin(skinsP[2]);
+        } else if (skin.equals("blue")) {
             player = player.BlUE_Player_BASE;
+            player.setSkin(skinsP[0]);
         }
         String computerType = alienType[random.nextInt(0, 3)];
         if (computerType.equals("red")) {
             computer = new ComputerPlayer(Player.RED_Player_BASE, "red");
+            computer.setSkin(skinsC[1]);
         } else if (computerType.equals("blue")) {
             computer = new ComputerPlayer(Player.BlUE_Player_BASE, "blue");
+            computer.setSkin(skinsC[2]);
         } else if (computerType.equals("green")) {
             computer = new ComputerPlayer(Player.GREEN_Player_BASE, "green");
+            computer.setSkin(skinsC[0]);
         }
 
         // Initialize player and computer

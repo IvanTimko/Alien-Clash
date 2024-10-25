@@ -2,11 +2,12 @@ package Game;
 
 import java.util.Random;
 
+import javax.swing.ImageIcon;
+
 public class ComputerPlayer extends Player {
     boolean startSecond;
     int lastPUltiCountdown;
     int lastPDefCountdown;
-    String[] actions = new String[] { "ultimate", "attack1", "attack2" };
 
     public ComputerPlayer(String PlayerType, int hp, Attack attack1, Attack attack2, Attack ultimate, double defense,
             double generationVariabilty, String skinName) {
@@ -20,6 +21,7 @@ public class ComputerPlayer extends Player {
         // Call the parent Player class constructor that accepts a Player and String
         super(basePlayer, skinName);
         this.startSecond = true; // Other specific logic for ComputerPlayer
+
     }
 
     public String getAction(int playerUltiCountDown, int playerDefenseCountDown, int computerUltiCountDown,
