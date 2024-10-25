@@ -45,6 +45,8 @@ public class AlienBattleGame extends JPanel {
     private int defenceCountDown;
     private int computerUltiCountDown;
     private int computerDefenseCountDown;
+    private int score;
+    
 
     private String[] skinsP = new String[] {
             "pictures/blue-player.png", "pictures/red-player.png", "pictures/green-player.png" };
@@ -67,18 +69,24 @@ public class AlienBattleGame extends JPanel {
 
         if (skin.equals("red")) {
             player = player.RED_Player_BASE;
-        } else if (skin.equals("blue")) {
-            player = player.GREEN_Player_BASE;
+            player.setSkin(skinsP[1]);
         } else if (skin.equals("green")) {
+            player = player.GREEN_Player_BASE;
+            player.setSkin(skinsP[2]);
+        } else if (skin.equals("blue")) {
             player = player.BlUE_Player_BASE;
+            player.setSkin(skinsP[0]);
         }
         String computerType = alienType[random.nextInt(0, 3)];
         if (computerType.equals("red")) {
             computer = new ComputerPlayer(Player.RED_Player_BASE, "red");
+            computer.setSkin(skinsC[1]);
         } else if (computerType.equals("blue")) {
             computer = new ComputerPlayer(Player.BlUE_Player_BASE, "blue");
+            computer.setSkin(skinsC[2]);
         } else if (computerType.equals("green")) {
             computer = new ComputerPlayer(Player.GREEN_Player_BASE, "green");
+            computer.setSkin(skinsC[0]);
         }
 
         // Initialize player and computer
@@ -328,12 +336,14 @@ public class AlienBattleGame extends JPanel {
 
         if (action.equals("attack1")) {
             damage = player.getAttack1Power();
+            score+=damage;
             opponent.takeDamage(damage);
             updateHPLabel();
             checkVictory();
             defenceCountDown--;
         } else if (action.equals("attack2")) {
             damage = player.getAttack2Power();
+            score+=damage;
             opponent.takeDamage(damage);
             updateHPLabel();
             checkVictory();
@@ -346,11 +356,13 @@ public class AlienBattleGame extends JPanel {
 
         } else if (action.equals("ultimate")) {
             damage = player.getUltimatePower();
+            score+=damage;
             opponent.takeDamage(damage);
             ultimateLoaderCT = 0;
             updateHPLabel();
             checkVictory();
             defenceCountDown--;
+            
 
         }
 
@@ -377,7 +389,7 @@ public class AlienBattleGame extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (computer.getHP() != 100 || !computer.getStart()) {
+                if (computer.getHP() != computer.getMaxHp() || !computer.getStart()) {
 
                     // Get the computer's action (either attack or shield)
                     String action = computer.getAction(ultimateLoaderCT, defenceCountDown, computerUltiCountDown,
@@ -482,7 +494,30 @@ public class AlienBattleGame extends JPanel {
     private void checkVictory() {
         if (player.getHP() <= 0) {
             disableButtons();
-            messageLabelComputer.setText("Game Over - You lost!");
+            statsMenuLabel.setVisible(false);
+            Timer timer = new Timer(4000, new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                    frame.dispose();
+                    new StartMenu("rematch",score);
+                    player.setHP(player.getMaxHp());
+                    computer.setHP(computer.getMaxHp());
+                    
+                    
+
+                    // Stop the timer after it's done
+                    ((Timer) e.getSource()).stop();
+                }
+            });
+
+            // Start the timer
+            timer.setRepeats(false); // Only run once
+            timer.start();
+            
+
+
+            
         } else if (computer.getHP() <= 0) {
 
             isStatsBoost(0); // Trigger stats boost if needed
@@ -494,6 +529,7 @@ public class AlienBattleGame extends JPanel {
                 public void actionPerformed(ActionEvent e) {
                     // Create a new computer opponent after 1 second
                     computer = new ComputerPlayer(player, alienType[random.nextInt(0, 3)]);
+                    
 
                     // Reset the opponent's HP label
                     opponenHPLabel.setText(" HP: " + computer.getHP());
@@ -519,6 +555,7 @@ public class AlienBattleGame extends JPanel {
         for (Component comp : components) {
             if (comp instanceof JButton) {
                 comp.setEnabled(false);
+                comp.setVisible(false);
             }
         }
     }
@@ -570,15 +607,17 @@ public class AlienBattleGame extends JPanel {
     }
 
     private void toggleButtons(Boolean val) {
-        attack1Button.setVisible(val);
-        attack2Button.setVisible(val);
+        if (player.getHP() > 0) {
+            attack1Button.setVisible(val);
+            attack2Button.setVisible(val);
 
-        if (ultimateLoaderCT >= 4 || !val) {
-            ultimateButton.setVisible(val);
+            if (ultimateLoaderCT >= 4 || !val) {
+                ultimateButton.setVisible(val);
 
-        }
-        if (defenceCountDown <= 0 || !val) {
-            shieldButton.setVisible(val);
+            }
+            if (defenceCountDown <= 0 || !val) {
+                shieldButton.setVisible(val);
+            }
         }
     }
 
@@ -593,7 +632,7 @@ public class AlienBattleGame extends JPanel {
     private void initStatsBoost() {
         toggleButtons(false);
         // Create a Timer to delay the execution by 4.5 second (4500 milliseconds)
-        Timer delayTimer = new Timer(4500, new ActionListener() {
+        Timer delayTimer = new Timer(2000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Your stat boosts logic here
