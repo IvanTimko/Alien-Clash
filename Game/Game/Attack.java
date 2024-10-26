@@ -22,6 +22,10 @@ public class Attack {
         this.damage += change;
     }
 
+    public void setDamage(int damage) {
+        this.damage = damage;
+    }
+
     public double getDamagePower() {
         if (hitChance > Math.random()) {
             return random.nextDouble(damage * variabilty, damage * (1 + variabilty));

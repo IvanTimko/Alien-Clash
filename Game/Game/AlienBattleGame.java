@@ -25,9 +25,9 @@ public class AlienBattleGame extends JPanel {
     JButton attack1Button;
     JButton attack2Button;
     JButton ultimateButton;
-    JButton addHPButton;
-    JButton addDmgButton;
-    JButton addDefenceButton;
+    JButton perk1Button;
+    JButton perk2Button;
+    JButton perk3Button;
 
     private ImageIcon attackIcon;
     private ImageIcon defenceIcon;
@@ -83,12 +83,31 @@ public class AlienBattleGame extends JPanel {
             computer.setSkin(skinsC[1]);
         } else if (computerType.equals("blue")) {
             computer = new ComputerPlayer(Player.BlUE_Player_BASE, "blue");
-            computer.setSkin(skinsC[2]);
+
+            computer.setSkin(skinsC[0]);
         } else if (computerType.equals("green")) {
             computer = new ComputerPlayer(Player.GREEN_Player_BASE, "green");
-            computer.setSkin(skinsC[0]);
-        }
+            computer.setSkin(skinsC[2]);
 
+            
+
+        }
+        System.out.println(
+                "player: attack1: " + player.attack1.damage + ", " + player.attack1.hitChance + ", "
+                        + player.attack1.variabilty
+                        + "attack2: " + player.attack2.damage + ", " + player.attack2.hitChance + ", "
+                        + player.attack2.variabilty
+                        + "ultiamte: " + player.ultimate.damage + ", " + player.ultimate.hitChance + ", "
+                        + player.ultimate.variabilty + ", hp:" + player.hp + " ,defense " + player.defense
+                        + "genvar: " + player.generationVariabilty);
+        System.out.println("computer: attack1: " + computer.attack1.damage + ", "
+                + computer.attack1.hitChance + ", "
+                + computer.attack1.variabilty
+                + "attack2: " + computer.attack2.damage + ", " + computer.attack2.hitChance + ", "
+                + computer.attack2.variabilty
+                + "ultiamte: " + computer.ultimate.damage + ", " + computer.ultimate.hitChance + ", "
+                + computer.ultimate.variabilty + ", hp:" + computer.hp + " ,defense " + computer.defense
+                + "genvar: " + computer.generationVariabilty);
         // Initialize player and computer
 
         // Main game panel
@@ -157,33 +176,33 @@ public class AlienBattleGame extends JPanel {
         this.setComponentZOrder(statsMenuLabel, 0);
         statsMenuLabel.setVisible(false);
 
-        addDmgButton = new JButton("extra damage");
-        addDmgButton.setBounds(45, 100, 150, 200);
-        addDmgButton.setBackground(new Color(75, 44, 111));
-        addDmgButton.setForeground(new Color(49, 91, 164));
-        addDmgButton.setFont(new Font("Orbitron", Font.BOLD, 27));
-        addDmgButton.setOpaque(true);
-        addDmgButton.setBorderPainted(false);
+        perk2Button = new JButton("perk2");
+        perk2Button.setBounds(45, 100, 150, 200);
+        perk2Button.setBackground(new Color(75, 44, 111));
+        perk2Button.setForeground(new Color(49, 91, 164));
+        perk2Button.setFont(new Font("Orbitron", Font.BOLD, 14));
+        perk2Button.setOpaque(true);
+        perk2Button.setBorderPainted(false);
 
-        addDefenceButton = new JButton("extra def");
-        addDefenceButton.setBounds(45 + 180, 100, 150, 200);
-        addDefenceButton.setFont(new Font("Orbitron", Font.BOLD, 27));
-        addDefenceButton.setForeground(new Color(49, 91, 164));
-        addDefenceButton.setBackground(new Color(75, 44, 111));
-        addDefenceButton.setOpaque(true);
-        addDefenceButton.setBorderPainted(false);
+        perk3Button = new JButton("perk3");
+        perk3Button.setBounds(45 + 180, 100, 150, 200);
+        perk3Button.setFont(new Font("Orbitron", Font.BOLD, 14));
+        perk3Button.setForeground(new Color(49, 91, 164));
+        perk3Button.setBackground(new Color(75, 44, 111));
+        perk3Button.setOpaque(true);
+        perk3Button.setBorderPainted(false);
 
-        addHPButton = new JButton("heal");
-        addHPButton.setBounds(45 + 360, 100, 150, 200);
-        addHPButton.setFont(new Font("Orbitron", Font.BOLD, 27));
-        addHPButton.setForeground(new Color(49, 91, 164));
-        addHPButton.setBackground(new Color(75, 44, 111));
-        addHPButton.setOpaque(true);
-        addHPButton.setBorderPainted(false);
+        perk1Button = new JButton("perk1");
+        perk1Button.setBounds(45 + 360, 100, 150, 200);
+        perk1Button.setFont(new Font("Orbitron", Font.BOLD, 14));
+        perk1Button.setForeground(new Color(49, 91, 164));
+        perk1Button.setBackground(new Color(75, 44, 111));
+        perk1Button.setOpaque(true);
+        perk1Button.setBorderPainted(false);
 
-        statsMenuLabel.add(addDmgButton);
-        statsMenuLabel.add(addHPButton);
-        statsMenuLabel.add(addDefenceButton);
+        statsMenuLabel.add(perk2Button);
+        statsMenuLabel.add(perk1Button);
+        statsMenuLabel.add(perk3Button);
 
         // Action listeners for buttons
         attack1Button.addActionListener(new ActionListener() {
@@ -225,12 +244,36 @@ public class AlienBattleGame extends JPanel {
 
             }
         });
-
-        addDmgButton.addActionListener(new ActionListener() {
+        /// new perks
+        perk1Button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (perk1.name.equals("heal")) {
+                    player.addHP(perk1.value);
+                } else if (perk1.name.equals("regenerate")) {
+                    player.healPercentage(perk1.value);
+                }
+                updateHPLabel();
 
-                player.addDamage(statsMenuDamage);
+                statsMenuLabel.setVisible(false);
+                toggleButtons(true);
+                computer.setStart();
+
+            }
+
+        });
+        perk2Button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (perk2.name.equals("increaseDef")) {
+                    player.increaseDef(perk2.value);
+                } else if (perk2.name.equals("incpercentageDef")) {
+                    player.incPercentageDef(perk2.value);
+                } else if (perk2.name.equals("decreaseDef")) {
+                    computer.decreaseDefense(perk2.value);
+                }
+
+                updateHPLabel();
                 statsMenuLabel.setVisible(false);
                 toggleButtons(true);
 
@@ -238,33 +281,22 @@ public class AlienBattleGame extends JPanel {
 
             }
         });
-        addHPButton.addActionListener(new ActionListener() {
+        perk3Button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                player.addHP(statsMenuHp);
-                if (player.getHP() > player.maxHP) {
-                    player.setHP(player.maxHP);
+                if (perk3.name.equals("increaseDam")) {
+                    player.addDamage(perk3.value);
+                } else if (perk3.name.equals("incpercentageDam")) {
+                    player.addPercentageDam(perk3.value);
                 }
                 updateHPLabel();
                 statsMenuLabel.setVisible(false);
                 toggleButtons(true);
+
                 computer.setStart();
 
             }
         });
-        addDefenceButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                player.addDefence(statMenuDefence);
-                statsMenuLabel.setVisible(false);
-                toggleButtons(true);
-                computer.setStart();
-
-            }
-        });
-
     }
 
     // Start the player attack animation
@@ -394,14 +426,16 @@ public class AlienBattleGame extends JPanel {
                     // Get the computer's action (either attack or shield)
                     String action = computer.getAction(ultimateLoaderCT, defenceCountDown, computerUltiCountDown,
                             computerDefenseCountDown);
-                    System.out.println("attack1: " + player.attack1.damage + ", " + player.attack1.hitChance + ", "
-                            + player.attack1.variabilty
-                            + "attack2: " + player.attack2.damage + ", " + player.attack2.hitChance + ", "
-                            + player.attack2.variabilty
-                            + "ultiamte: " + player.ultimate.damage + ", " + player.ultimate.hitChance + ", "
-                            + player.ultimate.variabilty + ", hp:" + player.hp + " ,defense " + player.defense
-                            + "genvar: " + player.generationVariabilty);
-                    System.out.println("attack1: " + computer.attack1.damage + ", " + computer.attack1.hitChance + ", "
+                    System.out.println(
+                            "player: attack1: " + player.attack1.damage + ", " + player.attack1.hitChance + ", "
+                                    + player.attack1.variabilty
+                                    + "attack2: " + player.attack2.damage + ", " + player.attack2.hitChance + ", "
+                                    + player.attack2.variabilty
+                                    + "ultiamte: " + player.ultimate.damage + ", " + player.ultimate.hitChance + ", "
+                                    + player.ultimate.variabilty + ", hp:" + player.hp + " ,defense " + player.defense
+                                    + "genvar: " + player.generationVariabilty);
+                    System.out.println("computer: attack1: " + computer.attack1.damage + ", "
+                            + computer.attack1.hitChance + ", "
                             + computer.attack1.variabilty
                             + "attack2: " + computer.attack2.damage + ", " + computer.attack2.hitChance + ", "
                             + computer.attack2.variabilty
@@ -426,7 +460,6 @@ public class AlienBattleGame extends JPanel {
                         // Execute attack logic
                         double damage = Math.round(computer.attack1.getDamagePower());
                         player.takeDamage(damage);
-                        System.out.println(player.hp);
                         updateHPLabel();
                         checkVictory();
                         messageLabelComputer.setIcon(attackIcon);
@@ -440,7 +473,6 @@ public class AlienBattleGame extends JPanel {
                         // Execute attack logic
                         double damage = Math.round(computer.attack2.getDamagePower());
                         player.takeDamage(damage);
-                        System.out.println(player.hp);
                         updateHPLabel();
                         checkVictory();
                         messageLabelComputer.setIcon(attackIcon);
@@ -454,7 +486,6 @@ public class AlienBattleGame extends JPanel {
                         // Execute attack logic
                         double damage = Math.round(computer.ultimate.getDamagePower());
                         player.takeDamage(damage);
-                        System.out.println(player.hp);
                         updateHPLabel();
                         checkVictory();
                         messageLabelComputer.setIcon(attackIcon);
@@ -628,6 +659,13 @@ public class AlienBattleGame extends JPanel {
 
     }
 
+    private String[] perkHeals = new String[] { "heal", "regenerate" };
+    private String[] perkDefenses = new String[] { "increaseDef", "incpercentageDef", "decreaseDef" };
+    private String[] perkDamage = new String[] { "increaseDam", "incpercentageDam" };
+    private Perk perk1;
+    private Perk perk2;
+    private Perk perk3;
+
     // INPUT WILL BE LEVEL
     private void initStatsBoost() {
         toggleButtons(false);
@@ -636,16 +674,66 @@ public class AlienBattleGame extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Your stat boosts logic here
-                statMenuDefence = 3;
-                statsMenuDamage = 4;
-                statsMenuHp = 5;
 
-                addHPButton.setText("+" + statsMenuHp + " HP");
-                addDmgButton.setText("+" + statsMenuDamage + " AD");
-                addDefenceButton.setText("+" + statMenuDefence + " Def");
+                perk1 = new Perk(perkHeals[random.nextInt(perkHeals.length)]);
+                perk2 = new Perk(perkDefenses[random.nextInt(perkDefenses.length)]);
+                perk3 = new Perk(perkDamage[random.nextInt(perkDamage.length)]);
+
+                perk1Button.setText(perk1.getText());
+                perk2Button.setText(perk2.getText());
+                perk3Button.setText(perk3.getText());
 
                 statsMenuLabel.setVisible(true);
 
+                // logic for computer choice of perks
+                if (player.hp > computer.hp) {
+                    Perk computerPerk = new Perk(perkHeals[random.nextInt(perkHeals.length)]);
+                    if (computerPerk.name.equals("heal")) {
+                        computer.addHP(computerPerk.value);
+                    } else if (computerPerk.name.equals("regenerate")) {
+                        computer.healPercentage(computerPerk.value);
+                    }
+                } else if (player.attack2.damage > computer.attack2.damage) {
+                    Perk computerPerk = new Perk(perkDefenses[random.nextInt(perkDefenses.length)]);
+                    if (computerPerk.name.equals("increaseDef")) {
+                        computer.increaseDef(computerPerk.value);
+                    } else if (computerPerk.name.equals("incpercentageDef")) {
+                        computer.incPercentageDef(computerPerk.value);
+                    } else if (computerPerk.name.equals("decreaseDef")) {
+                        player.decreaseDefense(computerPerk.value);
+                    }
+                } else if (player.defense < computer.defense || player.hp < computer.hp) {
+                    Perk computerPerk = new Perk(perkDamage[random.nextInt(perkDamage.length)]);
+                    if (computerPerk.name.equals("increaseDam")) {
+                        computer.addDamage(computerPerk.value);
+                    } else if (computerPerk.name.equals("incpercentageDam")) {
+                        computer.addPercentageDam(computerPerk.value);
+                    }
+                } else {
+                    Perk computerPerk = new Perk(perkHeals[random.nextInt(perkHeals.length)]);
+                    if (computerPerk.name.equals("heal")) {
+                        computer.addHP(computerPerk.value);
+                    } else if (computerPerk.name.equals("regenerate")) {
+                        computer.healPercentage(computerPerk.value);
+                    }
+                }
+
+                System.out.println(
+                        "player: attack1: " + player.attack1.damage + ", " + player.attack1.hitChance + ", "
+                                + player.attack1.variabilty
+                                + "attack2: " + player.attack2.damage + ", " + player.attack2.hitChance + ", "
+                                + player.attack2.variabilty
+                                + "ultiamte: " + player.ultimate.damage + ", " + player.ultimate.hitChance + ", "
+                                + player.ultimate.variabilty + ", hp:" + player.hp + " ,defense " + player.defense
+                                + "genvar: " + player.generationVariabilty);
+                System.out.println("computer: attack1: " + computer.attack1.damage + ", "
+                        + computer.attack1.hitChance + ", "
+                        + computer.attack1.variabilty
+                        + "attack2: " + computer.attack2.damage + ", " + computer.attack2.hitChance + ", "
+                        + computer.attack2.variabilty
+                        + "ultiamte: " + computer.ultimate.damage + ", " + computer.ultimate.hitChance + ", "
+                        + computer.ultimate.variabilty + ", hp:" + computer.hp + " ,defense " + computer.defense
+                        + "genvar: " + computer.generationVariabilty);
                 // Stop the timer after the task is executed
                 ((Timer) e.getSource()).stop();
 
