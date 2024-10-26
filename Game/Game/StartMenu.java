@@ -6,19 +6,25 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class StartMenu extends JFrame {
-
-    public StartMenu() {
-        this.setTitle("Alien Battle Game");
+    JLabel background;
+    public StartMenu(String startGameMessage,int score) {
+        
+        this.setTitle("Alien Clash");
+        
         this.setSize(800, 600);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BorderLayout());
         this.setLocationRelativeTo(null);
         // Backgroung label
-        JLabel background = new JLabel(new ImageIcon(this.getClass().getResource("pictures/background.jpeg")));
+        if (startGameMessage.equals("rematch")) {
+            background = new JLabel(new ImageIcon(this.getClass().getResource("pictures/background_rematch.jpeg")));
+        }else {
+            background = new JLabel(new ImageIcon(this.getClass().getResource("pictures/background.jpeg")));
+        }
         background.setSize(800, 600);
         this.add(background);
         // Title label
-        JLabel titleLabel = new JLabel("Alien Battle Game", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("Alien Clash", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Serif", Font.BOLD, 24));
         background.add(titleLabel, BorderLayout.CENTER);
 
@@ -38,6 +44,7 @@ public class StartMenu extends JFrame {
         alienMenu.setVisible(false);
         background.add(alienMenu);
         
+        
 
         // Button for Red Alien
         JButton redAlienButton = new JButton("");
@@ -46,6 +53,7 @@ public class StartMenu extends JFrame {
         redAlienButton.setOpaque(false);
         redAlienButton.setContentAreaFilled(false);
         redAlienButton.setBorderPainted(false);
+        redAlienButton.setFocusPainted(false);
         // Button for Blue Alien
         JButton blueAlienButton = new JButton("");
         blueAlienButton.setBounds(259, 125, 75, 150);
@@ -53,6 +61,7 @@ public class StartMenu extends JFrame {
         blueAlienButton.setOpaque(false);
         blueAlienButton.setContentAreaFilled(false);
         blueAlienButton.setBorderPainted(false);
+        blueAlienButton.setFocusPainted(false);
         // Button for Green Alien
         JButton greenAlienButton = new JButton("");
         greenAlienButton.setBounds(378, 125, 75, 150);
@@ -60,10 +69,23 @@ public class StartMenu extends JFrame {
         greenAlienButton.setOpaque(false);
         greenAlienButton.setContentAreaFilled(false);
         greenAlienButton.setBorderPainted(false);
+        greenAlienButton.setFocusPainted(false);
 
         alienMenu.add(redAlienButton);
         alienMenu.add(greenAlienButton);
         alienMenu.add(blueAlienButton);
+
+        //score of a player
+        if (score != 0) {
+            JLabel scoreLabel = new JLabel(score+"");
+            scoreLabel.setFont(new Font("Impact", Font.BOLD, 50));
+            scoreLabel.setForeground(new Color(49, 91, 164)); //blue
+            scoreLabel.setBounds(200,-5,100,200);
+            background.add(scoreLabel);
+            
+
+        }
+
 
         // Button action listener
         playButton.addActionListener(new ActionListener() {
@@ -71,6 +93,7 @@ public class StartMenu extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 alienMenu.setVisible(true);
                 playButton.setVisible(false);
+                background = new JLabel(new ImageIcon(this.getClass().getResource("pictures/background.jpeg")));
             }
         });
         // Button action listener
@@ -93,6 +116,7 @@ public class StartMenu extends JFrame {
                 // create button selection
 
                 new AlienBattleGame("blue"); // Start the game
+                
             }
         });
         // Button action listener
@@ -111,6 +135,6 @@ public class StartMenu extends JFrame {
     }
 
     public static void main(String[] args) {
-        new StartMenu(); // Launch the start menu
+        new StartMenu("",0); // Launch the start menu
     }
 }

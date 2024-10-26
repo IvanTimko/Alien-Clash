@@ -36,7 +36,7 @@ public class Player {
     // basic constructor with all stats as parameters
     public Player(String playerType, int hp, Attack attack1, Attack attack2, Attack ultimate, double defense,
             double generationVariabilty, String skinName) {
-        skin = new ImageIcon(getClass().getResource(skinName)).getImage();
+        this.skin = new ImageIcon(getClass().getResource(skinName)).getImage();
         this.playerType = playerType;
         this.hp = hp;
         this.attack1 = attack1;
@@ -79,7 +79,11 @@ public class Player {
     }
 
     public Image getSkin() {
-        return skin;
+        return this.skin;
+    }
+
+    public void setSkin(String skinPath) {
+        this.skin = new ImageIcon(getClass().getResource(skinPath)).getImage();
     }
 
     public void setSkin(String skinPath) {
@@ -87,7 +91,7 @@ public class Player {
     }
 
     public int getHP() {
-        return hp;
+        return this.hp;
     }
 
     public void setHP(int hp) {
@@ -110,7 +114,7 @@ public class Player {
     }
 
     public double getDefense() {
-        return defense;
+        return this.defense;
     }
 
     public void takeDamage(double damage) {
