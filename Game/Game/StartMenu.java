@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 
 public class StartMenu extends JFrame {
     JLabel background;
+    String startGameMessage;
+    int score;
     public StartMenu(String startGameMessage,int score) {
         
         this.setTitle("Alien Clash");
@@ -17,7 +19,7 @@ public class StartMenu extends JFrame {
         this.setLocationRelativeTo(null);
         // Backgroung label
         if (startGameMessage.equals("rematch")) {
-            background = new JLabel(new ImageIcon(this.getClass().getResource("pictures/background_rematch.jpeg")));
+            background = new JLabel(new ImageIcon(this.getClass().getResource("pictures/background_rematch.png")));
         }else {
             background = new JLabel(new ImageIcon(this.getClass().getResource("pictures/background.jpeg")));
         }

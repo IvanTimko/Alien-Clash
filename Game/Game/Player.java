@@ -82,9 +82,7 @@ public class Player {
         return this.skin;
     }
 
-    public void setSkin(String skinPath) {
-        this.skin = new ImageIcon(getClass().getResource(skinPath)).getImage();
-    }
+    
 
     public void setSkin(String skinPath) {
         this.skin = new ImageIcon(getClass().getResource(skinPath)).getImage();

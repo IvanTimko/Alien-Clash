@@ -33,9 +33,7 @@ public class AlienBattleGame extends JPanel {
     private ImageIcon defenceIcon;
     private JFrame frame;
 
-    private int statsMenuDamage;
-    private int statsMenuHp;
-    private int statMenuDefence;
+    
     private int ultimateLoaderCT;
     private int roundCounter;
     private int playerAttackX; // X position for the player's attack animation
@@ -53,13 +51,13 @@ public class AlienBattleGame extends JPanel {
     private String[] skinsC = new String[] {
             "pictures/blue-computer.png", "pictures/red-computer.png", "pictures/green-computer.png" };
     private Random random = new Random();
-    private String skin;
+    
     private String[] alienType = new String[] { "red", "green", "blue" };
 
     public AlienBattleGame(String skin) {
 
         // Initialize the frame
-        this.skin = skin;
+        
         frame = new JFrame("Alien Clash");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
@@ -521,17 +519,17 @@ public class AlienBattleGame extends JPanel {
     }
 
     // Check if there's a winner
-    // Check if there's a winner
     private void checkVictory() {
         if (player.getHP() <= 0) {
             disableButtons();
             statsMenuLabel.setVisible(false);
-            Timer timer = new Timer(4000, new ActionListener() {
+            Timer timer = new Timer(2000, new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
 
                     frame.dispose();
                     new StartMenu("rematch",score);
+                    
                     player.setHP(player.getMaxHp());
                     computer.setHP(computer.getMaxHp());
                     
@@ -653,7 +651,7 @@ public class AlienBattleGame extends JPanel {
     }
 
     private void isStatsBoost(int roundCounter) {
-        if (roundCounter % 3 == 0) {
+        if (roundCounter % 3 == 0 && player.getHP() > 0) {
             initStatsBoost();
         }
 
