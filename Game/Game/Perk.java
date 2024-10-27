@@ -2,12 +2,11 @@ package Game;
 
 import java.util.Random;
 
+/** Class for creation of perks that boost aliens every 3 round or when Player kill Computer.
+ * 
+ */
 public class Perk {
 
-    private String[] perkGroups = new String[] { "heal", "defense", "damage" };
-    private String[] perkHeals = new String[] { "heal", "regenerate" };
-    private String[] perkDefenses = new String[] { "increase", "incpercentage", "decrease" };
-    private String[] perkDamage = new String[] { "increase", "incpercentage" };
     double upperBound;
     double lowerBound;
     String name;
@@ -15,6 +14,10 @@ public class Perk {
     String text;
     private Random random = new Random();
 
+    /**
+     * Contructor for specific perks.
+     * @param name type of perk to be created
+     */
     public Perk(String name) {
         this.name = name;
         if (name.equals("heal")) {
@@ -25,13 +28,13 @@ public class Perk {
             this.text = "<html>Heal " + this.value + "% of<br>  missing Hp</html>";
         } else if (name.equals("increaseDef")) {
             this.value = random.nextInt(8, 15);
-            this.text = "Defense +" + this.value;
+            this.text = "Defence +" + this.value;
         } else if (name.equals("incpercentageDef")) {
             this.value = random.nextInt(10, 30);
-            this.text = "Defense +" + this.value + "%";
+            this.text = "Defence +" + this.value + "%";
         } else if (name.equals("decreaseDef")) {
             this.value = random.nextInt(5, 12);
-            this.text = "<html>Opponent's<br>  defense -" + +this.value + "</html>";
+            this.text = "<html>Opponent's<br>  defence -" + +this.value + "</html>";
         } else if (name.equals("increaseDam")) {
             this.value = random.nextInt(3, 6);
             this.text = "Damage +" + this.value;

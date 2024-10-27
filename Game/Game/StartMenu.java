@@ -1,15 +1,27 @@
 package Game;
 
-import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.*;
 
+
+/** Start menu.
+ * 
+ */
 public class StartMenu extends JFrame {
     JLabel background;
     String startGameMessage;
     int score;
-    public StartMenu(String startGameMessage,int score) {
+    
+    /**
+     *  Menu that introduces the game or shows Player much score has he earned.
+     * @param startGameMessage indicator that is used to determine if player is just starting 
+     *      or died and restarting the game
+     * @param score how much score has Player earned in this game
+     */
+    public StartMenu(String startGameMessage, int score) {
         
         this.setTitle("Alien Clash");
         
@@ -19,9 +31,11 @@ public class StartMenu extends JFrame {
         this.setLocationRelativeTo(null);
         // Backgroung label
         if (startGameMessage.equals("rematch")) {
-            background = new JLabel(new ImageIcon(this.getClass().getResource("pictures/background_rematch.png")));
-        }else {
-            background = new JLabel(new ImageIcon(this.getClass().getResource("pictures/background.jpeg")));
+            background = new JLabel(new ImageIcon(
+                this.getClass().getResource("pictures/background_rematch.jpeg")));
+        } else {
+            background = new JLabel(new ImageIcon(
+                this.getClass().getResource("pictures/background.jpeg")));
         }
         background.setSize(800, 600);
         this.add(background);
@@ -51,7 +65,8 @@ public class StartMenu extends JFrame {
         // Button for Red Alien
         JButton redAlienButton = new JButton("");
         redAlienButton.setBounds(140, 125, 75, 150);
-        redAlienButton.setIcon(new ImageIcon(this.getClass().getResource("pictures/red-computer.png")));
+        redAlienButton.setIcon(new ImageIcon(
+            this.getClass().getResource("pictures/red-computer.png")));
         redAlienButton.setOpaque(false);
         redAlienButton.setContentAreaFilled(false);
         redAlienButton.setBorderPainted(false);
@@ -59,7 +74,8 @@ public class StartMenu extends JFrame {
         // Button for Blue Alien
         JButton blueAlienButton = new JButton("");
         blueAlienButton.setBounds(259, 125, 75, 150);
-        blueAlienButton.setIcon(new ImageIcon(this.getClass().getResource("pictures/blue-computer.png")));
+        blueAlienButton.setIcon(
+            new ImageIcon(this.getClass().getResource("pictures/blue-computer.png")));
         blueAlienButton.setOpaque(false);
         blueAlienButton.setContentAreaFilled(false);
         blueAlienButton.setBorderPainted(false);
@@ -67,7 +83,8 @@ public class StartMenu extends JFrame {
         // Button for Green Alien
         JButton greenAlienButton = new JButton("");
         greenAlienButton.setBounds(378, 125, 75, 150);
-        greenAlienButton.setIcon(new ImageIcon(this.getClass().getResource("pictures/green-computer.png")));
+        greenAlienButton.setIcon(
+            new ImageIcon(this.getClass().getResource("pictures/green-computer.png")));
         greenAlienButton.setOpaque(false);
         greenAlienButton.setContentAreaFilled(false);
         greenAlienButton.setBorderPainted(false);
@@ -79,10 +96,10 @@ public class StartMenu extends JFrame {
 
         //score of a player
         if (score != 0) {
-            JLabel scoreLabel = new JLabel(score+"");
+            JLabel scoreLabel = new JLabel(score + "");
             scoreLabel.setFont(new Font("Impact", Font.BOLD, 50));
             scoreLabel.setForeground(new Color(49, 91, 164)); //blue
-            scoreLabel.setBounds(200,-5,100,200);
+            scoreLabel.setBounds(200, -5, 100, 200);
             background.add(scoreLabel);
             
 
@@ -95,7 +112,8 @@ public class StartMenu extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 alienMenu.setVisible(true);
                 playButton.setVisible(false);
-                background = new JLabel(new ImageIcon(this.getClass().getResource("pictures/background.jpeg")));
+                background = new JLabel(new ImageIcon(
+                    this.getClass().getResource("pictures/background.jpeg")));
             }
         });
         // Button action listener
@@ -137,6 +155,6 @@ public class StartMenu extends JFrame {
     }
 
     public static void main(String[] args) {
-        new StartMenu("",0); // Launch the start menu
+        new StartMenu("", 0); // Launch the start menu
     }
 }
