@@ -79,7 +79,7 @@ public class Player {
     }
 
     public Image getSkin() {
-        return this.skin;
+        return skin;
     }
 
     

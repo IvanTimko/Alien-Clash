@@ -681,7 +681,10 @@ public class AlienBattleGame extends JPanel {
                 perk2Button.setText(perk2.getText());
                 perk3Button.setText(perk3.getText());
 
-                statsMenuLabel.setVisible(true);
+                if (player.getHP() > 0 ) {
+                
+                    statsMenuLabel.setVisible(true);
+                }
 
                 // logic for computer choice of perks
                 if (player.hp > computer.hp) {
