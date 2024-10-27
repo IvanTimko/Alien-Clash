@@ -1,34 +1,62 @@
 package Game;
 
-import java.util.Random;
 
-import javax.swing.ImageIcon;
 
+
+/**
+ * Class whose parent class is Player is used for creation of ComputerPlayers, so enemies.
+ * Each computerPlayer is always on a similar level as you, but never the same. 
+ */
 public class ComputerPlayer extends Player {
     boolean startSecond;
     int lastPUltiCountdown;
     int lastPDefCountdown;
 
-    public ComputerPlayer(String PlayerType, int hp, Attack attack1, Attack attack2, Attack ultimate, double defense,
-            double generationVariabilty, String skinName) {
-        super(PlayerType, hp, attack1, attack2, ultimate, defense,
+    /**
+     * Constructor for ComputerPlayer that creates opponent with unique stats.
+     * @param playerType type of computer, player will be facing
+     * @param hp how much hp will the computer have
+     * @param attack1 attack object with its stats
+     * @param attack2 attack object with its stats
+     * @param ultimate attack object with its stats
+     * @param defence how much defence will computer have
+     * @param generationVariabilty variability on stats of computer
+     * @param skinName the skin which will computer have
+     */
+    public ComputerPlayer(String playerType, int hp, Attack attack1, Attack attack2,
+            Attack ultimate, double defence, double generationVariabilty, String skinName) {
+        super(playerType, hp, attack1, attack2, ultimate, defence,
                 generationVariabilty, skinName);
 
         startSecond = true;
     }
 
+
+    /**
+     * Call the parent Player class constructor that accepts a Player and String.
+     * @param basePlayer base stats of the computer 
+     * @param skinName skin of computer
+     */
     public ComputerPlayer(Player basePlayer, String skinName) {
-        // Call the parent Player class constructor that accepts a Player and String
+        // 
         super(basePlayer, skinName);
         this.startSecond = true; // Other specific logic for ComputerPlayer
 
     }
 
-    public String getAction(int playerUltiCountDown, int playerDefenseCountDown, int computerUltiCountDown,
-            int computerDefenseCountDown) {
+    /**
+     *  Computers logic to determine which move will help him win.
+     * @param playerUltiCountDown how many round till Player will have ultimate available
+     * @param playerDefenceCountDown how many round till Player will have defence available
+     * @param computerUltiCountDown  how many round till Computer will have ultimate available
+     * @param computerDefenceCountDown  how many round till Computer will have defence available
+     * @return the attack / defence computer will use
+     */
+    public String getAction(int playerUltiCountDown, int playerDefenceCountDown, 
+            int computerUltiCountDown, int computerDefenceCountDown) {
 
-        if (playerDefenseCountDown > 0 && computerUltiCountDown <= 0
-                && lastPDefCountdown - playerDefenseCountDown == 1) {
+        if (playerDefenceCountDown > 0 && computerUltiCountDown <= 0
+                && lastPDefCountdown - playerDefenceCountDown == 1) {
 
             lastPDefCountdown = playerUltiCountDown;
             lastPUltiCountdown = computerUltiCountDown;
@@ -37,14 +65,16 @@ public class ComputerPlayer extends Player {
         } else if (computerUltiCountDown <= 0) {
             lastPDefCountdown = playerUltiCountDown;
             lastPUltiCountdown = computerUltiCountDown;
-            return (Math.random() < 0.4 ? "ultimate" : random.nextBoolean() ? "attack1" : "attack2"); // 40%
-        } else if (playerUltiCountDown < 1 && computerDefenseCountDown <= 0
+            return (Math.random() < 0.4 ? "ultimate" : random.nextBoolean() 
+                ? "attack1" : "attack2");
+        } else if (playerUltiCountDown < 1 && computerDefenceCountDown <= 0
                 && lastPUltiCountdown - playerUltiCountDown == 1) {
 
             lastPDefCountdown = playerUltiCountDown;
             lastPUltiCountdown = computerUltiCountDown;
 
-            return (Math.random() < 0.7 ? "shield" : random.nextBoolean() ? "attack1" : "attack2"); // 70%
+            return (Math.random() < 0.7 ? "shield" : random.nextBoolean() 
+                ? "attack1" : "attack2"); // 70%
         } else {
             lastPDefCountdown = playerUltiCountDown;
             lastPUltiCountdown = computerUltiCountDown;
