@@ -19,7 +19,7 @@ public class StartMenu extends JFrame {
         this.setLocationRelativeTo(null);
         // Backgroung label
         if (startGameMessage.equals("rematch")) {
-            background = new JLabel(new ImageIcon(this.getClass().getResource("pictures/background_rematch.png")));
+            background = new JLabel(new ImageIcon(this.getClass().getResource("pictures/background_rematch.jpeg")));
         }else {
             background = new JLabel(new ImageIcon(this.getClass().getResource("pictures/background.jpeg")));
         }

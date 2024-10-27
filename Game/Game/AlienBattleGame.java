@@ -18,8 +18,10 @@ public class AlienBattleGame extends JPanel {
 
     private JLabel playerHPLabel;
     private JLabel opponenHPLabel;
-    private JLabel messageLabelComputer;
+    
     private JLabel statsMenuLabel;
+    private JLabel dmgByPlayer;
+    private JLabel dmgByComp;
 
     JButton shieldButton;
     JButton attack1Button;
@@ -33,6 +35,10 @@ public class AlienBattleGame extends JPanel {
     private ImageIcon defenceIcon;
     private JFrame frame;
 
+    String attackTypeP;
+    String attackTypeC;
+    
+
     
     private int ultimateLoaderCT;
     private int roundCounter;
@@ -44,6 +50,7 @@ public class AlienBattleGame extends JPanel {
     private int computerUltiCountDown;
     private int computerDefenseCountDown;
     private int score;
+    private int dmgDealt;
     
 
     private String[] skinsP = new String[] {
@@ -129,11 +136,21 @@ public class AlienBattleGame extends JPanel {
         this.add(playerHPLabel);
         this.add(opponenHPLabel);
 
-        // Label for Last action of computer
-        messageLabelComputer = new JLabel(" ‎ ");
-        messageLabelComputer.setForeground(Color.WHITE);
-        messageLabelComputer.setBounds(700, 130, 150, 50);
-        this.add(messageLabelComputer);
+        //Labels for dmg dealt by Player
+        dmgByPlayer = new JLabel("");
+        dmgByPlayer.setFont(new Font("Serif", Font.BOLD, 24));
+        dmgByPlayer.setForeground(Color.green);
+        dmgByPlayer.setBounds(700,90,50,50);
+        this.add(dmgByPlayer);
+        dmgByPlayer.setOpaque(false);
+        this.setComponentZOrder(dmgByPlayer, 0);
+
+        //Labels for dmg dealt by Computer
+        dmgByComp = new JLabel();
+        dmgByComp.setFont(new Font("Serif", Font.BOLD, 24));
+        dmgByComp.setForeground(Color.red);
+        dmgByComp.setBounds(220,220,50,50);
+        this.add(dmgByComp);
 
         // shield button set-up
         shieldButton = new JButton("Shield");
@@ -208,6 +225,7 @@ public class AlienBattleGame extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 roundCounter++;
                 startPlayerAttackAnimation(); // Player attack
+                attackTypeP = "a1";
                 // Execute attack logic
                 playerAction("attack1", player, computer);
 
@@ -218,6 +236,7 @@ public class AlienBattleGame extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 roundCounter++;
+                attackTypeP = "a1";
                 startPlayerAttackAnimation(); // Player attack
                 // Execute attack logic
                 playerAction("attack2", player, computer);
@@ -239,6 +258,7 @@ public class AlienBattleGame extends JPanel {
                 roundCounter++;
                 playerAction("ultimate", player, computer);
                 startPlayerAttackAnimation(); // Player attack
+                attackTypeP = "u";
 
             }
         });
@@ -367,14 +387,14 @@ public class AlienBattleGame extends JPanel {
         if (action.equals("attack1")) {
             damage = player.getAttack1Power();
             score+=damage;
-            opponent.takeDamage(damage);
+            dmgDealt = opponent.takeDamage(damage);
             updateHPLabel();
             checkVictory();
             defenceCountDown--;
         } else if (action.equals("attack2")) {
             damage = player.getAttack2Power();
             score+=damage;
-            opponent.takeDamage(damage);
+            dmgDealt = opponent.takeDamage(damage);
             updateHPLabel();
             checkVictory();
             defenceCountDown--;
@@ -387,7 +407,7 @@ public class AlienBattleGame extends JPanel {
         } else if (action.equals("ultimate")) {
             damage = player.getUltimatePower();
             score+=damage;
-            opponent.takeDamage(damage);
+            dmgDealt = opponent.takeDamage(damage);
             ultimateLoaderCT = 0;
             updateHPLabel();
             checkVictory();
@@ -403,6 +423,11 @@ public class AlienBattleGame extends JPanel {
             computerTurn();
             isStatsBoost(roundCounter);
             computer.setStart();
+            if (dmgDealt != 0) {
+            dmgByPlayer.setText("-"+dmgDealt);
+            } else {
+                dmgByPlayer.setText(""+dmgDealt);
+            }
         }
 
     }
@@ -411,7 +436,6 @@ public class AlienBattleGame extends JPanel {
 
     private void computerTurn() {
 
-        messageLabelComputer.setVisible(false);
 
         // Create a Swing Timer to delay the computer's move by 2.5 seconds (2500
         // milliseconds)
@@ -453,52 +477,59 @@ public class AlienBattleGame extends JPanel {
                     if (action.equals("attack1")) {
                         computerUltiCountDown--;
                         defenceCountDown--;
+                        attackTypeC="a1";
                         startComputerAttackAnimation(); // Start the computer's attack animation
 
                         // Execute attack logic
                         double damage = Math.round(computer.attack1.getDamagePower());
-                        player.takeDamage(damage);
+                        dmgDealt = player.takeDamage(damage);
                         updateHPLabel();
                         checkVictory();
-                        messageLabelComputer.setIcon(attackIcon);
+                        
 
                         // If the computer decides to shield
                     } else if (action.equals("attack2")) {
                         computerUltiCountDown--;
                         defenceCountDown--;
+                        attackTypeC="a1";
                         startComputerAttackAnimation(); // Start the computer's attack animation
 
                         // Execute attack logic
                         double damage = Math.round(computer.attack2.getDamagePower());
-                        player.takeDamage(damage);
+                        dmgDealt = player.takeDamage(damage);
                         updateHPLabel();
                         checkVictory();
-                        messageLabelComputer.setIcon(attackIcon);
+                        
 
                         // If the computer decides to shield
                     } else if (action.equals("ultimate")) {
-                        startComputerAttackAnimation(); // Start the computer's attack animation
+                        
                         computerUltiCountDown = 4;
                         defenceCountDown--;
-
+                        attackTypeC="u";
                         // Execute attack logic
                         double damage = Math.round(computer.ultimate.getDamagePower());
-                        player.takeDamage(damage);
+                        dmgDealt = player.takeDamage(damage);
                         updateHPLabel();
                         checkVictory();
-                        messageLabelComputer.setIcon(attackIcon);
+                        
+                        startComputerAttackAnimation(); // Start the computer's attack animation
 
                         // If the computer decides to shield
                     } else if (action.equals("shield")) {
-                        messageLabelComputer.setIcon(defenceIcon);
+                        
                         computer.addDefence(30);
                         computerDefenceActive = true;
                         defenceCountDown = 4;
 
                     }
-
+                    if (dmgDealt != 0) {
+                    dmgByComp.setText("-"+dmgDealt);
+                    } else {
+                        dmgByComp.setText(""+dmgDealt);
+                    }
                     // Stop the timer after the computer has made its move
-                    messageLabelComputer.setVisible(true);
+                    
                     ((Timer) e.getSource()).stop();
                 }
 
@@ -557,9 +588,16 @@ public class AlienBattleGame extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     // Create a new computer opponent after 1 second
-                    computer = new ComputerPlayer(player, alienType[random.nextInt(0, 3)]);
+                    String color=alienType[random.nextInt(0, 3)];
+                    computer = new ComputerPlayer(player,color );
                     
-
+                    if (color.equals("red")) {
+                        computer.setSkin(skinsC[1]);
+                    } else if (color.equals("blue")) {
+                        computer.setSkin(skinsC[0]);
+                    } else if (color.equals("green")) {
+                        computer.setSkin(skinsC[2]);
+                    }
                     // Reset the opponent's HP label
                     opponenHPLabel.setText(" HP: " + computer.getHP());
 
@@ -592,17 +630,18 @@ public class AlienBattleGame extends JPanel {
     // Load background
     Image backgroundImage = new ImageIcon(getClass().getResource("pictures/background.jpeg")).getImage();
     // Load attack image
-    Image missile = new ImageIcon(getClass().getResource("pictures/missile.png")).getImage();
-    Image missileRotated = new ImageIcon(getClass().getResource("pictures/missileRotated.png")).getImage();
-
+    Image missileA =new ImageIcon(getClass().getResource("pictures/particleAttack.png")).getImage();
+    Image missileARotated=new ImageIcon(getClass().getResource("pictures/particleAttackRoteted.png")).getImage();
+    Image missileU =new ImageIcon(getClass().getResource("pictures/particleUltimate.png")).getImage();
+    Image missileURotated=new ImageIcon(getClass().getResource("pictures/particleUltimateRotated.png")).getImage();
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (backgroundImage != null) {
+        
             g.drawImage(backgroundImage, 0, 0, 800, 600, this);
             g.drawImage(player.getSkin(), 100, 250, 75, 150, this);
             g.drawImage(computer.getSkin(), 600, 100, 75, 150, this);
-        }
+        
 
         drawHealthBar(g, player.getHP(), player.getMaxHp(), 50, 200, 200, 20, Color.GREEN);
 
@@ -610,12 +649,24 @@ public class AlienBattleGame extends JPanel {
 
         // Draw the player's attack animation
         if (isAnimatingPlayerAttack) {
-            g.drawImage(missileRotated, playerAttackX, playerAttackY, 50, 50, null);
+            if (attackTypeP.equals("a1")) {
+                g.drawImage(missileARotated, playerAttackX, playerAttackY, 50, 50, null);
+            } else if (attackTypeP.equals("u") ){
+                g.drawImage(missileURotated, playerAttackX, playerAttackY, 50, 50, null);
+            }
+            
+            
         }
 
         // Draw the computer's attack animation
         if (isAnimatingComputerAttack) {
-            g.drawImage(missile, computerAttackX, computerAttackY, 50, 50, null);
+            if (attackTypeC.equals("a1")) {
+                g.drawImage(missileA, computerAttackX, computerAttackY, 50, 50, null);
+                
+            } else if (attackTypeC.equals("u") ){
+                g.drawImage(missileU, computerAttackX, computerAttackY, 50, 50, null);
+            }
+            
         }
     }
 

@@ -115,11 +115,11 @@ public class Player {
         return this.defense;
     }
 
-    public void takeDamage(double damage) {
+    public int takeDamage(double damage) {
         damage = Math.max(Math.round(damage * (1 - this.defense / 100.0)), 0);
         this.hp -= damage;
         System.out.println("damage delth" + damage + ",hp after:" + this.hp);
-
+        return(int)damage;
     }
 
     public String getAction() {
@@ -215,6 +215,7 @@ public class Player {
         this.defense = Math.round(VaryStat(newBase.defense * prototype.defense / prototypeBase.defense,
                 newBase.generationVariabilty));
         this.skin = newBase.skin;
+        System.out.println("newbase skin:"+newBase.skin+" prototype skin:"+prototype.skin);
         this.generationVariabilty = newBase.generationVariabilty;
     }
 
